@@ -60,10 +60,10 @@ export const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
   const progressPercent = totalPages > 1 ? (currentPage / (totalPages - 1)) * 100 : 100
 
   return (
-    <div className="mt-2">
-      <div ref={carouselRef} className="flex overflow-hidden py-2">
+    <div>
+      <div ref={carouselRef} className="flex overflow-hidden">
         {pages.map((page, pageIndex) => (
-          <div key={pageIndex} className="flex w-full shrink-0 justify-start px-2">
+          <div key={pageIndex} className="flex w-full shrink-0 justify-start px-2 py-6">
             {page.map((projectData) => (
               <div key={projectData.id} className="w-full px-2 sm:w-1/2 lg:w-1/4">
                 <Card
