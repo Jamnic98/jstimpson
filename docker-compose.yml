@@ -1,0 +1,25 @@
+services:
+  client:
+    container_name: jstimpson-client
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://server:8080
+    depends_on:
+      - server
+
+  server:
+    container_name: jstimpson-server
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
