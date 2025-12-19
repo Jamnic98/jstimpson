@@ -80,6 +80,13 @@ async def add_new_activities_to_db() -> List[ActivityModel]:
         # Insert new activities into DB
         activity_data = []
         for strava_activity in filtered_strava_activities:
+            start_date_local_dt = datetime.strptime(
+                strava_activity.get("start_date_local"), "%Y-%m-%dT%H:%M:%SZ"
+            )
+            start_date_dt = datetime.strptime(
+                strava_activity.get("start_date"), "%Y-%m-%dT%H:%M:%SZ"
+            )
+
             activity_data.append({
                 "strava_id": safe_str(strava_activity.get("id")),
                 "name": strava_activity.get("name"),
@@ -87,9 +94,9 @@ async def add_new_activities_to_db() -> List[ActivityModel]:
                 "moving_time": strava_activity.get("moving_time"),
                 "elapsed_time": strava_activity.get("elapsed_time"),
                 "total_elevation_gain": strava_activity.get("total_elevation_gain"),
-                "sport_type": strava_activity.get("sport_type"),  # will be converted to SportType
-                "start_date": strava_activity.get("start_date"),
-                "start_date_local": strava_activity.get("start_date_local"),
+                "sport_type": strava_activity.get("sport_type"),
+                "start_date": start_date_dt,
+                "start_date_local": start_date_local_dt,
                 "timezone": strava_activity.get("timezone"),
                 "upload_id": safe_str(strava_activity.get("upload_id")),
                 "average_speed": strava_activity.get("average_speed"),

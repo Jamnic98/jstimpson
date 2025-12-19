@@ -29,7 +29,7 @@ async def index(after: int = Query(None)):
 
     try:
         query = {}
-        if after:
+        if after is not None:
             # Convert timestamp from Unix time (milliseconds)
             query = {"start_date_local": {"$gt": datetime.fromtimestamp(after / 1000)}}
 
