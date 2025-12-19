@@ -1,0 +1,28 @@
+# Python environments and packaging
+.Python
+.venv/
+
+.env.*
+
+*.egg-info/
+.installed.cfg
+*.egg
+build/
+dist/
+sdist/
+downloads/
+develop-eggs/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+var/
+
+# Python cache
+**/__pycache__/**
+
+# IDE / Editor configurations
+.idea
+.aws-sam/
+samconfig.toml
