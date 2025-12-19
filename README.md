@@ -45,12 +45,6 @@ The backend handles API requests, data preprocessing, and refresh tokens for ext
 - Jest, React Testing Library, Pytest
 - Strava API integration
 
-## Screenshots
-
-![Home Page](https://github.com/Jamnic98/jstimpson-client/assets/home_page.webp)  
-![Projects Page](https://github.com/Jamnic98/jstimpson-client/assets/projects_page.webp)  
-![About Page](https://github.com/Jamnic98/jstimpson-client/assets/about_page.webp)
-
 ## GitHub Repositories
 
 - [Client](https://github.com/Jamnic98/jstimpson-client)
