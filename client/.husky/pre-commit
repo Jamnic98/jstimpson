@@ -1,0 +1,19 @@
+# Format code
+
+npm run format
+
+# Lint code to check for code quality issues
+
+npm run lint
+
+# Stage all formatted and linted files
+
+git add .
+
+# Run tests to ensure functionality
+
+npm test
+
+# Build to verify everything compiles correctly
+
+npm run build
