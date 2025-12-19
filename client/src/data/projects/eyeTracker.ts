@@ -29,7 +29,7 @@ const eyeTracker: Project = {
   mainLanguage: ['TypeScript', 'Python'],
   links: [
     {
-      label: 'GitHub',
+      label: 'GitHub Repo',
       URL: `https://github.com/Jamnic98/${projectId}`,
       type: LinkType.EXTERNAL,
     },

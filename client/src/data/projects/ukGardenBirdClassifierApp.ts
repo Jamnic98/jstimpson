@@ -1,11 +1,10 @@
 import { LinkType, type Project } from 'types'
 import { projectImagesFolderPaths } from 'utils/constants'
 
-const ukGardenBirdClassifierId = 'uk-garden-bird-classifier'
-const ukGardenBirdClassifierAppId = 'uk-garden-bird-classifier-app'
+const projectId = 'uk-garden-bird-classifier-app'
 
 const ukGardenBirdClassifierApp: Project = {
-  id: ukGardenBirdClassifierAppId,
+  id: projectId,
   title: 'UK Garden Bird Classifier',
   summary: 'A custom CNN model trained to recognise common UK garden birds.',
   paragraphs: [
@@ -28,7 +27,7 @@ const ukGardenBirdClassifierApp: Project = {
   To keep the service stable, I added rate limiting and built safeguards into the interface to reduce the chance of rapid or repeated requests overloading the backend. This ensures the model can handle user interaction without degrading performance.
   `,
   ],
-  projectPageURI: `/coding/${ukGardenBirdClassifierAppId}`,
+  projectPageURI: `/coding/${projectId}`,
   screenshotURIs: [
     `${projectImagesFolderPaths.ukGardenBirdClassifierApp}/interface.webp`,
     `${projectImagesFolderPaths.ukGardenBirdClassifierApp}/accuracy.webp`,
@@ -37,13 +36,8 @@ const ukGardenBirdClassifierApp: Project = {
   mainLanguage: ['Python'],
   links: [
     {
-      URL: `https://github.com/Jamnic98/${ukGardenBirdClassifierAppId}`,
-      label: 'GitHub Repo (FastAPI Server)',
-      type: LinkType.EXTERNAL,
-    },
-    {
-      URL: `https://github.com/Jamnic98/${ukGardenBirdClassifierId}`,
-      label: 'GitHub Repo (Model Building & Training)',
+      URL: `https://github.com/Jamnic98/${projectId}`,
+      label: 'GitHub Repo',
       type: LinkType.EXTERNAL,
     },
   ],

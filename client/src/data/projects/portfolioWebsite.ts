@@ -5,10 +5,10 @@ const diffInMilliseconds = new Date().getTime() - new Date('2022-01-31').getTime
 const millisecondsInYear = 1000 * 60 * 60 * 24 * 365.25
 const yearsSinceDeployment = Math.floor(diffInMilliseconds / millisecondsInYear)
 
-const portfolioWebsiteProjectId = 'portfolio-website'
+const projectId = 'portfolio-website'
 
 const portfolioWebsite: Project = {
-  id: portfolioWebsiteProjectId,
+  id: projectId,
   title: 'Portfolio Website',
   summary:
     'A Full Stack web application for showcasing my coding skills, 3D modelling skills and running stats.',
@@ -27,7 +27,7 @@ const portfolioWebsite: Project = {
     `This website is an ongoing project, and I am continually adding new features and improving the design.`,
   ],
 
-  projectPageURI: `/coding/${portfolioWebsiteProjectId}`,
+  projectPageURI: `/coding/${projectId}`,
   screenshotURIs: [
     `${projectImagesFolderPaths.portfolioWebsite}/home_page.webp`,
     `${projectImagesFolderPaths.portfolioWebsite}/projects_page.webp`,
@@ -37,12 +37,7 @@ const portfolioWebsite: Project = {
   links: [
     {
       URL: 'https://github.com/Jamnic98/jstimpson-client',
-      label: 'GitHub (client)',
-      type: LinkType.EXTERNAL,
-    },
-    {
-      URL: 'https://github.com/Jamnic98/jstimpson-server',
-      label: 'GitHub (server)',
+      label: 'GitHub Repo',
       type: LinkType.EXTERNAL,
     },
   ],
