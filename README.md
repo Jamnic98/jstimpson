@@ -45,11 +45,6 @@ The backend handles API requests, data preprocessing, and refresh tokens for ext
 - Jest, React Testing Library, Pytest
 - Strava API integration
 
-## GitHub Repositories
-
-- [Client](https://github.com/Jamnic98/jstimpson-client)
-- [Server](https://github.com/Jamnic98/jstimpson-server)
-
 ## Outcome
 
 This project demonstrates my ability to build and maintain a **full-stack, interactive web application** that integrates APIs, dynamic content, and data visualisation. It also highlights ongoing development and iteration as I expand features and improve the user experience.
