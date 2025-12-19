@@ -36,7 +36,7 @@ const portfolioWebsite: Project = {
   mainLanguage: ['TypeScript', 'Python'],
   links: [
     {
-      URL: 'https://github.com/Jamnic98/jstimpson-client',
+      URL: 'https://github.com/Jamnic98/jstimpson',
       label: 'GitHub Repo',
       type: LinkType.EXTERNAL,
     },
@@ -57,7 +57,7 @@ const portfolioWebsite: Project = {
     'Pytest',
     "Strava's API",
   ],
-  readmePath: `https://raw.githubusercontent.com/Jamnic98/jstimpson-client/refs/heads/main/README.md`,
+  readmePath: `https://raw.githubusercontent.com/Jamnic98/jstimpson/refs/heads/main/README.md`,
 }
 
 export default portfolioWebsite
