@@ -1,7 +1,6 @@
 import { type Metadata } from 'next'
-import { Suspense } from 'react'
 
-import { PageHeader, Loader, ActivityDataView } from 'components'
+import { PageHeader, ActivityDataView } from 'components'
 import { fetchActivities } from 'utils'
 
 const routeToFetchTypeMap: Record<string, 'Run' | 'Ride'> = {
@@ -48,15 +47,7 @@ export default async function Page(props: LogsProps) {
         </section> */}
 
         <section className="my-12">
-          <Suspense
-            fallback={
-              <div className="flex justify-center">
-                <Loader />
-              </div>
-            }
-          >
-            <ActivitiesDataSection activitiesPromise={activitiesPromise} type={params.type} />
-          </Suspense>
+          <ActivitiesDataSection activitiesPromise={activitiesPromise} type={params.type} />
         </section>
       </article>
     </>

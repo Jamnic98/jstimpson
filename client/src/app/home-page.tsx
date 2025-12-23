@@ -103,37 +103,37 @@ const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
         </Suspense>
 
         {/* Activity data */}
-        <Suspense
+        {/* <Suspense
           fallback={
             <div className="flex justify-center">
               <Loader />
             </div>
           }
-        >
-          <section className="my-12">
-            <div className="flex justify-between">
-              <h2 className="mb-0 text-3xl font-semibold">
-                {new Date().toLocaleString('default', { month: 'long' })}{' '}
-                {typeDisplayMap[selectedType]}
-              </h2>
-              {/* Activity type selector */}
-              <ActivityTypeSelector
-                selected={selectedType}
-                types={activityTypes}
-                onSelect={setSelectedType}
-              />
-            </div>
-            <hr className="my-4 border-gray-300" />
-            <ActivityStats activityData={allActivityData[selectedType]} type={selectedType} />
-            <div className="my-4 flex justify-center">
-              <Link className="group" href={`/logs/${selectedType}`}>
-                <span className="text-xl font-medium text-orange-600 group-hover:text-gray-950">
-                  {`- all ${typeDisplayMap[selectedType].toLowerCase()} stats -`}
-                </span>
-              </Link>
-            </div>
-          </section>
-        </Suspense>
+        > */}
+        <section className="my-12">
+          <div className="flex justify-between">
+            <h2 className="mb-0 text-3xl font-semibold">
+              {new Date().toLocaleString('default', { month: 'long' })}{' '}
+              {typeDisplayMap[selectedType]}
+            </h2>
+            {/* Activity type selector */}
+            <ActivityTypeSelector
+              selected={selectedType}
+              types={activityTypes}
+              onSelect={setSelectedType}
+            />
+          </div>
+          <hr className="my-4 border-gray-300" />
+          <ActivityStats activityData={allActivityData[selectedType]} type={selectedType} />
+          <div className="my-4 flex justify-center">
+            <Link className="group" href={`/logs/${selectedType}`}>
+              <span className="text-xl font-medium text-orange-600 group-hover:text-gray-950">
+                {`- all ${typeDisplayMap[selectedType].toLowerCase()} stats -`}
+              </span>
+            </Link>
+          </div>
+        </section>
+        {/* </Suspense> */}
       </article>
     </>
   )
