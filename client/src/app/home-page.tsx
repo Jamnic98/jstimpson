@@ -1,15 +1,45 @@
 'use client'
 
-import { Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
 
-import { PageHeader, Explorer, RunningStats, Loader } from 'components'
-import { type Project, type RunData } from 'types'
+import { PageHeader, Explorer, ActivityStats, Loader } from 'components'
+import { type Project, type ActivityData } from 'types'
 import projects from 'data/projects'
 
-interface HomePageProps {
-  runData: RunData[]
+const typeDisplayMap: Record<string, string> = {
+  running: 'Running',
+  cycling: 'Cycling',
 }
+interface HomePageProps {
+  allActivityData: Record<string, ActivityData[]>
+}
+
+const ActivityTypeSelector = ({
+  selected,
+  types,
+  onSelect,
+}: {
+  selected: string
+  types: string[]
+  onSelect: (type: string) => void
+}) => (
+  <div className="flex gap-2 mb-4">
+    {types.map((type) => (
+      <button
+        key={type}
+        onClick={() => onSelect(type)}
+        className={`px-4 py-2 rounded-full font-medium cursor-pointer ${
+          selected === type
+            ? 'bg-orange-600 text-white'
+            : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+        }`}
+      >
+        {typeDisplayMap[type]}
+      </button>
+    ))}
+  </div>
+)
 
 const FeaturedProjects = ({ projects }: { projects: Partial<Project>[] }) => (
   <section className="my-12">
@@ -17,26 +47,10 @@ const FeaturedProjects = ({ projects }: { projects: Partial<Project>[] }) => (
   </section>
 )
 
-const RunningSection = ({ runData }: { runData: RunData[] }) => (
-  <section className="my-12">
-    <h2 className="mb-0 text-3xl font-semibold">
-      {new Date().toLocaleString('default', { month: 'long' })} Running
-    </h2>
-    <hr className="my-4 border-gray-300" />
-    <div className="mb-4">
-      <RunningStats runData={runData} />
-    </div>
-    <div className="my-4 flex justify-center">
-      <Link className="group" href="/logs">
-        <span className="text-xl font-medium text-orange-600 group-hover:text-gray-950">
-          - all stats -
-        </span>
-      </Link>
-    </div>
-  </section>
-)
+const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
+  const activityTypes = Object.keys(allActivityData)
+  const [selectedType, setSelectedType] = useState(activityTypes[0])
 
-const HomePage: React.FC<HomePageProps> = ({ runData }) => {
   const filteredProjects = projects
     .filter((project) =>
       [
@@ -74,11 +88,10 @@ const HomePage: React.FC<HomePageProps> = ({ runData }) => {
             >
               Typation
             </Link>{' '}
-            which is currently deployed in public alpha where anyone can try it out for free!
+            which is currently deployed and available to try!
           </p>
         </section>
 
-        {/* Projects */}
         <Suspense
           fallback={
             <div className="flex justify-center">
@@ -89,7 +102,7 @@ const HomePage: React.FC<HomePageProps> = ({ runData }) => {
           <FeaturedProjects projects={filteredProjects} />
         </Suspense>
 
-        {/* Running data */}
+        {/* Activity data */}
         <Suspense
           fallback={
             <div className="flex justify-center">
@@ -97,7 +110,29 @@ const HomePage: React.FC<HomePageProps> = ({ runData }) => {
             </div>
           }
         >
-          <RunningSection runData={runData} />
+          <section className="my-12">
+            <div className="flex justify-between">
+              <h2 className="mb-0 text-3xl font-semibold">
+                {new Date().toLocaleString('default', { month: 'long' })}{' '}
+                {typeDisplayMap[selectedType]}
+              </h2>
+              {/* Activity type selector */}
+              <ActivityTypeSelector
+                selected={selectedType}
+                types={activityTypes}
+                onSelect={setSelectedType}
+              />
+            </div>
+            <hr className="my-4 border-gray-300" />
+            <ActivityStats activityData={allActivityData[selectedType]} type={selectedType} />
+            <div className="my-4 flex justify-center">
+              <Link className="group" href={`/logs/${selectedType}`}>
+                <span className="text-xl font-medium text-orange-600 group-hover:text-gray-950">
+                  {`- all ${typeDisplayMap[selectedType].toLowerCase()} stats -`}
+                </span>
+              </Link>
+            </div>
+          </section>
         </Suspense>
       </article>
     </>

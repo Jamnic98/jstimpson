@@ -45,7 +45,7 @@ async def index(
             query["start_date_local"] = {"$gt": datetime.fromtimestamp(after / 1000)}
 
         if sport_type:
-            query["sport_type"] = sport_type.value  # store enum value in query
+            query["sport_type"] = sport_type.value
 
         activities = await activities_collection.find(query).to_list(length=None)
         return ActivityCollection(activities=activities).model_dump()

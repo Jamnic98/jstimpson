@@ -76,7 +76,7 @@ export const ScatterGraph: React.FC<ScatterGraphProps> = ({ data, xAxisObj, yAxi
       .append('circle')
       .attr('cx', (d: { x: number; y: number; start_date_local: Date }) => x(d.x))
       .attr('cy', (d: { x: number; y: number; start_date_local: Date }) => y(d.y))
-      .attr('r', 0.8)
+      .attr('r', 1)
       .style('fill', '#f54900')
   })
 

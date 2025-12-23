@@ -5,10 +5,13 @@ export const reduceSumFunc = (prev: number, cur: number) => prev + cur
 
 export const getRandomElement = <T>(array: T[]) => array[Math.floor(Math.random() * array.length)]
 
-export const getRunningData = async (timestamp?: number) => {
-  const url = new URL('/runs', process.env.NEXT_PUBLIC_SERVER_URL as string)
+export const fetchActivities = async (type?: string, timestamp?: number) => {
+  const url = new URL('/activities', process.env.NEXT_PUBLIC_SERVER_URL as string)
   if (timestamp) {
     url.searchParams.append('after', timestamp.toString())
+  }
+  if (type) {
+    url.searchParams.append('type', type)
   }
 
   try {
@@ -21,8 +24,8 @@ export const getRunningData = async (timestamp?: number) => {
       throw new Error(`Failed to fetch running data`)
     }
 
-    const { runs } = await response.json()
-    return runs
+    const { activities } = await response.json()
+    return activities
   } catch (error) {
     console.error(error)
 

@@ -80,7 +80,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
       .append('circle')
       .attr('cx', (d: { x: Date; y: number }) => x(new Date(d.x)))
       .attr('cy', (d: { x: Date; y: number }) => y(d.y))
-      .attr('r', 0.8)
+      .attr('r', 1)
       .style('fill', '#f54900')
   })
 

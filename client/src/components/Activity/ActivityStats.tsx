@@ -6,25 +6,22 @@ import {
   getTotalDistanceString,
   getTotalDurationString,
 } from 'utils'
-import { type RunData } from 'types'
+import { type ActivityData } from 'types'
 
-interface RunningStatsProps {
-  runData: RunData[]
+interface ActivityStatsProps {
+  activityData: ActivityData[]
+  type: string
 }
 
-export const RunningStats: React.FC<RunningStatsProps> = ({ runData }) => {
-  // distance
-  const distanceList = runData.map((runData: RunData) => runData.distance)
+export const ActivityStats: React.FC<ActivityStatsProps> = ({ activityData, type }) => {
+  const distanceList = activityData.map((a) => a.distance)
   const furthestDistanceInMeters = distanceList.length ? Math.max(...distanceList) : 0
-  const totalDistanceInMeters = distanceList.length
-    ? distanceList.reduce((a, b) => reduceSumFunc(a, b))
-    : 0
+  const totalDistanceInMeters = distanceList.length ? distanceList.reduce(reduceSumFunc) : 0
 
-  // duration
-  const durationList = runData.map((runData: RunData) => runData.duration)
-  const totalDurationInSeconds = durationList.length
-    ? durationList.reduce((a, b) => reduceSumFunc(a, b))
-    : 0
+  const durationList = activityData.map((a) => a.moving_time)
+  const totalDurationInSeconds = durationList.length ? durationList.reduce(reduceSumFunc) : 0
+
+  const displayType = type === 'Run' ? 'Run' : type === 'Ride' ? 'Ride' : type
 
   return (
     <ul className="grid list-inside list-disc grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4 p-0">
@@ -58,7 +55,9 @@ export const RunningStats: React.FC<RunningStatsProps> = ({ runData }) => {
         </span>
       </li>
       <li className="text-2xl text-orange-600">
-        <span className="text-xl text-gray-950">Run count: {runData.length}</span>
+        <span className="text-xl text-gray-950">
+          {displayType} count: {activityData.length}
+        </span>
       </li>
     </ul>
   )

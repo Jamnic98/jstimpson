@@ -1,20 +1,28 @@
 import { type Metadata } from 'next'
 
 import HomePage from './home-page'
-import { getRunningData } from 'utils'
+import { fetchActivities } from 'utils'
 
 export const metadata: Metadata = {
   title: 'Home',
 }
 
 export default async function Page() {
-  // get 1st of current month
   const date = new Date()
   date.setUTCDate(1)
   date.setUTCHours(0, 0, 0, 0)
 
-  // get running data from the 1st of the current month
-  const runs = await getRunningData(date.getTime())
+  // Fetch activities (default type optional)
+  const data = await fetchActivities(undefined, date.getTime())
 
-  return <HomePage runData={runs} />
+  // Reshape to keyed by type
+  const allActivityData: Record<string, any[]> = {}
+
+  data.forEach((activity: any) => {
+    const type = activity.sport_type === 'Run' ? 'running' : 'cycling'
+    if (!allActivityData[type]) allActivityData[type] = []
+    allActivityData[type].push(activity)
+  })
+
+  return <HomePage allActivityData={allActivityData} />
 }
