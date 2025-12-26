@@ -24,7 +24,7 @@ export const ActivityStats: React.FC<ActivityStatsProps> = ({ activityData, type
   const displayType = type === 'Run' ? 'Run' : type === 'Ride' ? 'Ride' : type
 
   return (
-    <ul className="grid list-inside list-disc grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4 p-0">
+    <ul className="grid list-inside list-disc grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4 p-0">
       <li className="text-2xl text-orange-600">
         <span className="text-xl text-gray-950">
           {getTotalDistanceString(totalDistanceInMeters)}

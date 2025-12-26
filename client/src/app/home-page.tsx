@@ -24,12 +24,12 @@ const ActivityTypeSelector = ({
   types: string[]
   onSelect: (type: string) => void
 }) => (
-  <div className="flex gap-2 mb-4">
+  <div className="flex gap-2 flex-col sm:flex-row">
     {types.map((type) => (
       <button
         key={type}
         onClick={() => onSelect(type)}
-        className={`px-4 py-2 rounded-full font-medium cursor-pointer ${
+        className={`px-4 py-2 rounded-full font-medium cursor-pointer outline-none ${
           selected === type
             ? 'bg-orange-600 text-white'
             : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
@@ -102,16 +102,8 @@ const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
           <FeaturedProjects projects={filteredProjects} />
         </Suspense>
 
-        {/* Activity data */}
-        {/* <Suspense
-          fallback={
-            <div className="flex justify-center">
-              <Loader />
-            </div>
-          }
-        > */}
         <section className="my-12">
-          <div className="flex justify-between">
+          <div className="flex justify-between space-x-2">
             <h2 className="mb-0 text-3xl font-semibold">
               {new Date().toLocaleString('default', { month: 'long' })}{' '}
               {typeDisplayMap[selectedType]}
