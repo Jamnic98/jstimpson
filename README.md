@@ -1,10 +1,10 @@
 # Portfolio Website
 
-A full-stack web application showcasing my coding projects, 3D modelling work, and running statistics.
+A full-stack web application showcasing my coding projects, 3D modelling work, and activity statistics.
 
 ## Overview
 
-This website has evolved over several years to become a dynamic, full-stack platform for displaying my work and tracking running data. The first version was a simple React single-page application styled with CSS. Over time, the site has been rebuilt and extended with modern technologies to improve performance, maintainability, and interactivity.
+This website has evolved over several years to become a dynamic, full-stack platform for displaying my work and tracking activity data. The first version was a simple React single-page application styled with CSS. Over time, the site has been rebuilt and extended with modern technologies to improve performance, maintainability, and interactivity.
 
 Key improvements include:
 
@@ -18,7 +18,7 @@ The site is continuously updated, with new features and design improvements adde
 ## Features
 
 - **Project Showcases**: Dynamic project cards with descriptions, tech stack, screenshots, and live README rendering
-- **Running Data**: Fetches activity data from **Strava’s API**, including automatic refresh handling
+- **Activity Data**: Fetches activity data from **Strava’s API**, including automatic refresh handling
 - **3D Models**: Interactive **Three.js** models embedded in project pages
 - **Markdown Rendering**: Displays README and project documentation with headings, lists, code blocks, and images
 - **Responsive Design**: Fully responsive across devices with consistent typography and layout

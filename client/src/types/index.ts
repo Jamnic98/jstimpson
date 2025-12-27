@@ -1,4 +1,3 @@
+export * from './activity.types'
 export * from './navlink.types'
 export * from './project.types'
-export * from './runs.types'
-export * from './activity.types'

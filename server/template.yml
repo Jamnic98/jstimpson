@@ -61,31 +61,6 @@ Resources:
           - GET
 
   # ----------------------
-  # Separate Lambda: Runs updater
-  # ----------------------
-  DbRunsUpdaterFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: jstimpson-server-db-runs-updater
-      Handler: app.handlers.runs_updater.handler
-      Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: "Allow"
-              Action:
-                - "ssm:GetParameters"
-                - "ssm:GetParameter"
-                - "ssm:GetParametersByPath"
-              Resource:
-                - "arn:aws:ssm:us-east-1:343647980472:parameter/jstimpson-server/*"
-      Events:
-        Schedule:
-          Type: Schedule
-          Properties:
-            # Update once a day at midnight UTC
-            Schedule: "cron(0 0 * * ? *)"
-
-  # ----------------------
   # Separate Lambda: Activities updater
   # ----------------------
   DbActivitiesUpdaterFunction:

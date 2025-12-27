@@ -142,7 +142,7 @@ export default function About() {
         </p>
         <p className="mb-4 text-justify text-xl">
           On the 22nd of October 2023, I ran the Battersea Park Marathon and raised £275 for The
-          Alzheimer&apos;s Society! To explore my running stats, click{' '}
+          Alzheimer&apos;s Society! To explore my activity stats, click{' '}
           <Link className="text-orange-600 hover:text-gray-950" href="/logs">
             here
           </Link>
