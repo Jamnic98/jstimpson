@@ -21,7 +21,7 @@ export const fetchActivities = async (type?: string, timestamp?: number) => {
       { next: { revalidate: 43200 } }
     )
     if (!response.ok) {
-      throw new Error(`Failed to fetch running data`)
+      throw new Error(`Failed to fetch activities data`)
     }
 
     const { activities } = await response.json()
@@ -32,7 +32,7 @@ export const fetchActivities = async (type?: string, timestamp?: number) => {
     // Different error messages based on the type of error
     if (error instanceof SyntaxError) {
       // This handles JSON parsing errors
-      throw new Error('Failed to parse the running data')
+      throw new Error('Failed to parse the activity data')
     } else if (error instanceof TypeError) {
       // This handles network errors (e.g., failed to fetch)
       throw new Error('Network error: Failed to connect to the server')
@@ -41,7 +41,7 @@ export const fetchActivities = async (type?: string, timestamp?: number) => {
       throw new Error(`Unexpected error: ${error.message}`)
     } else {
       // Fallback if the error is of an unknown type
-      throw new Error('An unknown error occurred while fetching running data')
+      throw new Error('An unknown error occurred while fetching activity data')
     }
   }
 }

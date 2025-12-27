@@ -13,6 +13,5 @@ logger.info("Database connection established")
 db = mongo_client.get_database(settings.DB_NAME)
 
 # Collections
-runs_collection = db.get_collection("runs")
 activities_collection = db.get_collection("activities")
 strava_tokens_collection = db.get_collection("strava_tokens")

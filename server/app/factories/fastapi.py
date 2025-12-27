@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.routers.activities_router import router as activities_router
-from app.core.routers.runs_router import router as runs_router
 from app.utils.config import settings
 
 
@@ -30,6 +29,5 @@ def create_fastapi_app():
 
     # add routers
     app.include_router(activities_router)
-    app.include_router(runs_router)
 
     return app
