@@ -26,12 +26,12 @@ import { activityContentMap } from 'data/activityContent'
 export default async function Page(props: LogsProps) {
   const params = await props.params
   const typeParam = params.type
-  const fetchType = routeToFetchTypeMap[typeParam] // 'Run' or 'Ride'
+  const fetchType = routeToFetchTypeMap[typeParam] || 'Run' // 'Run' or 'Ride'
   const displayType = routeToDisplayMap[typeParam] // 'Running' or 'Cycling'
 
   const content = activityContentMap[fetchType] || {
     title: displayType,
-    description: `Here is my ${displayType.toLowerCase()} data.`,
+    // description: `Here is my ${displayType.toLowerCase()} data.`,
     routineText: '',
   }
 

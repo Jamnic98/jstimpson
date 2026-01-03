@@ -49,7 +49,7 @@ const FeaturedProjects = ({ projects }: { projects: Partial<Project>[] }) => (
 
 const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
   const activityTypes = Object.keys(allActivityData)
-  const [selectedType, setSelectedType] = useState(activityTypes[0])
+  const [selectedType, setSelectedType] = useState('running')
 
   const filteredProjects = projects
     .filter((project) =>
@@ -125,7 +125,6 @@ const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
             </Link>
           </div>
         </section>
-        {/* </Suspense> */}
       </article>
     </>
   )
