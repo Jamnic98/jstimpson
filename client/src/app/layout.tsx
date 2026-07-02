@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Inter } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/react'
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import { Footer, Header, MenuToggle, NavLogo, NavLink } from '@/components'
