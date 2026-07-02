@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 
-import { leastSquares } from 'utils'
+import { leastSquares } from '@/utils'
 
 export interface LineGraphProps {
   data: { x: Date; y: number }[]

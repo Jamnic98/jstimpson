@@ -1,7 +1,7 @@
 import { type Metadata } from 'next'
 
-import { PageHeader, ActivityDataView } from 'components'
-import { fetchActivities } from 'utils'
+import { PageHeader, ActivityDataView } from '@/components'
+import { fetchActivities } from '@/utils'
 
 const routeToFetchTypeMap: Record<string, 'Run' | 'Ride'> = {
   running: 'Run',
@@ -21,7 +21,7 @@ interface LogsProps {
   params: Promise<{ type: string }>
 }
 
-import { activityContentMap } from 'data/activityContent'
+import { activityContentMap } from '@/data/activityContent'
 
 export default async function Page(props: LogsProps) {
   const params = await props.params

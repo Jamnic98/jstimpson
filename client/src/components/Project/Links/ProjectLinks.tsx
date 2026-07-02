@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { CgExternal, CgInternal } from 'react-icons/cg'
 
-import { LinkType, type ProjectLink } from 'types'
+import { LinkType, type ProjectLink } from '@/types'
 
 export interface ProjectLinksProps {
   links: ProjectLink[]

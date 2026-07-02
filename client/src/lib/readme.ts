@@ -16,7 +16,7 @@ export const fetchReadmeFromApi = async (url: string, token: string) => {
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github.v3+json',
+      Accept: '@/application/vnd.github.v3+json',
     },
   })
 

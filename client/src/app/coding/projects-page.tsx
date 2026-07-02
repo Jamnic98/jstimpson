@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 
-import { PageHeader, ProjectsCarousel, Select } from 'components'
-import { projectCodingLanguages } from 'utils'
-import projects from 'data/projects'
-import { type Project } from 'types'
+import { PageHeader, ProjectsCarousel, Select } from '@/components'
+import { projectCodingLanguages } from '@/utils'
+import projects from '@/data/projects'
+import { type Project } from '@/types'
 
 const defaultSelectValue = 'All'
 

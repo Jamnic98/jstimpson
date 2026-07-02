@@ -1,8 +1,8 @@
 'use client'
 import * as d3 from 'd3'
 
-import { ActivityStats, Histogram, LineGraph, ScatterGraph } from 'components'
-import { type ActivityData } from 'types'
+import { ActivityStats, Histogram, LineGraph, ScatterGraph } from '@/components'
+import { type ActivityData } from '@/types'
 
 interface ActivityDataViewProps {
   activityData: ActivityData[]

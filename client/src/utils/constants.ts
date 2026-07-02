@@ -1,4 +1,4 @@
-import type { NavLinkData } from 'types'
+import type { NavLinkData } from '@/types'
 
 export const navLinkDataArr: NavLinkData[] = [
   { label: 'coding', url: '/coding', children: [] },

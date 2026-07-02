@@ -5,8 +5,8 @@ import {
   getFurthestDistanceString,
   getTotalDistanceString,
   getTotalDurationString,
-} from 'utils'
-import { type ActivityData } from 'types'
+} from '@/utils'
+import { type ActivityData } from '@/types'
 
 interface ActivityStatsProps {
   activityData: ActivityData[]

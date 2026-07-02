@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { PageHeader } from 'components'
+import { PageHeader } from '@/components'
 
 const meta: Meta<typeof PageHeader> = {
   title: 'Components/PageHeader',

@@ -1,6 +1,6 @@
-import { LinkType, type Project } from 'types'
+import { LinkType, type Project } from '@/types'
 
-import { projectImagesFolderPaths } from 'utils/constants'
+import { projectImagesFolderPaths } from '@/utils/constants'
 
 const projectId = 'alt-world'
 

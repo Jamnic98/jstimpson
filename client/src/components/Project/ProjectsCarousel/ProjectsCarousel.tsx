@@ -3,9 +3,9 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5'
 
-import { Card } from 'components'
-import { useWidth } from 'utils'
-import { type Project } from 'types'
+import { Card } from '@/components'
+import { useWidth } from '@/utils'
+import { type Project } from '@/types'
 
 interface ProjectsCarouselProps {
   items: Project[]

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import Page from 'app/home-page'
+import Page from '@/app/home-page'
 
 const meta = {
   title: 'Pages/Home',

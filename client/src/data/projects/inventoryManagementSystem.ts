@@ -1,5 +1,5 @@
-import { type Project, LinkType } from 'types'
-import { projectImagesFolderPaths } from 'utils/constants'
+import { type Project, LinkType } from '@/types'
+import { projectImagesFolderPaths } from '@/utils/constants'
 
 const projectId = 'inventory-management-system'
 

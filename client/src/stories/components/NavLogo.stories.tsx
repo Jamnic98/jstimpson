@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { NavLogo } from 'components'
+import { NavLogo } from '@/components'
 
 const meta: Meta<typeof NavLogo> = {
   title: 'Components/NavLogo',

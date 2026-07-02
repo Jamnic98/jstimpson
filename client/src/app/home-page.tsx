@@ -3,9 +3,9 @@
 import { useState, Suspense } from 'react'
 import Link from 'next/link'
 
-import { PageHeader, Explorer, ActivityStats, Loader } from 'components'
-import { type Project, type ActivityData } from 'types'
-import projects from 'data/projects'
+import { PageHeader, Explorer, ActivityStats, Loader } from '@/components'
+import { type Project, type ActivityData } from '@/types'
+import projects from '@/data/projects'
 
 const typeDisplayMap: Record<string, string> = {
   running: 'Running',

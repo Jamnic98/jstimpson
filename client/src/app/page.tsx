@@ -3,7 +3,7 @@ export const revalidate = 43200
 import { type Metadata } from 'next'
 
 import HomePage from './home-page'
-import { fetchActivities } from 'utils'
+import { fetchActivities } from '@/utils'
 
 export const metadata: Metadata = {
   title: 'Home',

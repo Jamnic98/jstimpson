@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { Card } from 'components'
-import { LOREM_IPSUM } from 'utils/constants'
+import { Card } from '@/components'
+import { LOREM_IPSUM } from '@/utils/constants'
 
 const meta: Meta<typeof Card> = {
   title: 'Components/Card',

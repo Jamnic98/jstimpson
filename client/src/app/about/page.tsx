@@ -8,7 +8,7 @@ import {
   PERSONAL_LINKEDIN_URL,
   PERSONAL_GITHUB_URL,
   PROFILE_PICTURE_FOLDER_PATH,
-} from 'utils/constants'
+} from '@/utils/constants'
 
 const profilePictureDimensions = { width: 330, height: 330 }
 

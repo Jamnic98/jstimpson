@@ -2,9 +2,15 @@ import { type Metadata } from 'next'
 import Link from 'next/link'
 import { LuMoveLeft } from 'react-icons/lu'
 
-import { Markdown, PageHeader, ProjectDescriptions, ProjectLinks, ProjectGallery } from 'components'
-import { fetchReadme } from 'lib/readme'
-import projects_data from 'data/projects'
+import {
+  Markdown,
+  PageHeader,
+  ProjectDescriptions,
+  ProjectLinks,
+  ProjectGallery,
+} from '@/components'
+import { fetchReadme } from '@/lib/readme'
+import projects_data from '@/data/projects'
 
 interface ProjectProps {
   params: Promise<{ id: string }>

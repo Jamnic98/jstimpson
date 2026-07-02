@@ -1,5 +1,5 @@
-import { LinkType, type Project } from 'types'
-import { projectImagesFolderPaths } from 'utils/constants'
+import { LinkType, type Project } from '@/types'
+import { projectImagesFolderPaths } from '@/utils/constants'
 
 const projectId = 'blue-cheese-classifier'
 

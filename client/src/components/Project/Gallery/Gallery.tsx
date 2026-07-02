@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { IoClose } from 'react-icons/io5'
 
-import { Loader, Thumbnail } from 'components'
+import { Loader, Thumbnail } from '@/components'
 
 interface ProjectGalleryProps {
   screenshotURIs: string[]

@@ -1,5 +1,5 @@
-import projects from 'data/projects'
-import { type Project } from 'types'
+import projects from '@/data/projects'
+import { type Project } from '@/types'
 
 export const reduceSumFunc = (prev: number, cur: number) => prev + cur
 

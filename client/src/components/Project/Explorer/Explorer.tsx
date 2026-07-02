@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { type Project } from 'types'
+import { type Project } from '@/types'
 
 interface ExplorerProps {
   title: string

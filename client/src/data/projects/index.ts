@@ -1,4 +1,4 @@
-import { type Project } from 'types'
+import { type Project } from '@/types'
 
 import { default as altWorld } from './altWorld'
 import { default as blueCheeseClassifier } from './blueCheeseClassifier'

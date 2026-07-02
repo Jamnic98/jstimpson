@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { Select } from 'components'
-import { projectCodingLanguages } from 'utils'
+import { Select } from '@/components'
+import { projectCodingLanguages } from '@/utils'
 
 const meta: Meta<typeof Select> = {
   title: 'Components/Select',

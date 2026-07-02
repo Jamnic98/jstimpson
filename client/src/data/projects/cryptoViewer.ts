@@ -1,5 +1,5 @@
-import { type Project } from 'types'
-import { projectImagesFolderPaths } from 'utils/constants'
+import { type Project } from '@/types'
+import { projectImagesFolderPaths } from '@/utils/constants'
 
 const cryptoViewerProjectId = 'crypto-viewer'
 

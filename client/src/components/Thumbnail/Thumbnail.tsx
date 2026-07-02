@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 
-import { Loader } from 'components'
+import { Loader } from '@/components'
 
 interface ThumbnailProps {
   src: string

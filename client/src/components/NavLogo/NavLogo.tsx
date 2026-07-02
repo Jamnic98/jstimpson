@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import { MOBILE_SCREEN_WIDTH, useWidth } from 'utils'
+import { MOBILE_SCREEN_WIDTH, useWidth } from '@/utils'
 
 export interface NavLogoProps {
   linkURL?: string

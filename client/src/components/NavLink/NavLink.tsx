@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { MOBILE_SCREEN_WIDTH, useWidth } from 'utils'
-import { type NavLinkData } from 'types'
+import { MOBILE_SCREEN_WIDTH, useWidth } from '@/utils'
+import { type NavLinkData } from '@/types'
 
 interface NavlinkProps {
   navlinkObj: NavLinkData

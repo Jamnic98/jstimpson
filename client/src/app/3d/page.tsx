@@ -1,6 +1,6 @@
 import { type Metadata } from 'next'
 
-import { DiceModelViewer, PageHeader, ProjectGallery } from 'components'
+import { DiceModelViewer, PageHeader, ProjectGallery } from '@/components'
 
 const pageTitle = '3D Modelling'
 const diceImageFolder = '/images/blender/dice'

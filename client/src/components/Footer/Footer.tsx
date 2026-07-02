@@ -1,6 +1,6 @@
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 
-import { PERSONAL_GITHUB_URL, PERSONAL_LINKEDIN_URL } from 'utils'
+import { PERSONAL_GITHUB_URL, PERSONAL_LINKEDIN_URL } from '@/utils'
 
 export const Footer: React.FC = () => (
   <div

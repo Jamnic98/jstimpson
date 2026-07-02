@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 
 import { PageHeader } from './PageHeader'
-import { LOREM_IPSUM } from 'utils/constants'
+import { LOREM_IPSUM } from '@/utils/constants'
 
 const testTitle = 'Test Title'
 const testDescription = LOREM_IPSUM

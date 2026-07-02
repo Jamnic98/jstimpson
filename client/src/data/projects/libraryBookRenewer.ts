@@ -1,11 +1,11 @@
-import { LinkType, type Project } from 'types'
-import { projectImagesFolderPaths } from 'utils/constants'
+import { LinkType, type Project } from '@/types'
+import { projectImagesFolderPaths } from '@/utils/constants'
 
 const projectId = 'library-book-renewer'
 
 const libraryBookRenewer: Project = {
   id: projectId,
-  title: 'Library Book Renewer',
+  title: 'library Book Renewer',
   summary: 'A web scraper that automatically renews my library books.',
   paragraphs: [
     `This project was written in Python and uses the Selenium web scraping library to log into my library account and renew all the books that are due.

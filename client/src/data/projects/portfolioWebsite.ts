@@ -1,5 +1,5 @@
-import { LinkType, type Project } from 'types'
-import { projectImagesFolderPaths } from 'utils/constants'
+import { LinkType, type Project } from '@/types'
+import { projectImagesFolderPaths } from '@/utils/constants'
 
 const diffInMilliseconds = new Date().getTime() - new Date('2022-01-31').getTime()
 const millisecondsInYear = 1000 * 60 * 60 * 24 * 365.25
