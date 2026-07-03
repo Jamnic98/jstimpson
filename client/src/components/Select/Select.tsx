@@ -82,7 +82,7 @@ export const Select: React.FC<SelectProps> = ({ defaultValue, items, onChange })
 
       {/* Dropdown */}
       <div
-        className={`${hideDropdown ? 'hidden shadow' : ''} absolute z-10 w-full`}
+        className={`${hideDropdown ? 'hidden shadow' : ''} absolute z-30 w-full`}
         hidden={hideDropdown}
         data-testid="select-dropdown"
       >

@@ -1,5 +1,5 @@
 import { LinkType, type Project } from '@/types'
-import { projectImagesFolderPaths } from '@/utils/constants'
+// import { projectImagesFolderPaths } from '@/utils/constants'
 
 const ticTacGoProjectId = 'tic-tac-go'
 
@@ -19,8 +19,8 @@ const ticTacGo: Project = {
 
   projectPageURI: `/coding/${ticTacGoProjectId}`,
   screenshotURIs: [
-    `${projectImagesFolderPaths.ticTacGo}/code.webp`,
-    `${projectImagesFolderPaths.ticTacGo}/gameplay.webp`,
+    // `${projectImagesFolderPaths.ticTacGo}/code.webp`,
+    // `${projectImagesFolderPaths.ticTacGo}/gameplay.webp`,
   ],
   mainLanguage: ['Golang'],
   links: [

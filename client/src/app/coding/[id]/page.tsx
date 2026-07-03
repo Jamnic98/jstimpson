@@ -42,10 +42,12 @@ const Page = async (props: ProjectProps) => {
           </section>
         ) : null}
 
-        <section className="my-12">
-          <h2 className="mb-4 text-xl font-semibold">Gallery</h2>
-          <ProjectGallery screenshotURIs={projectData.screenshotURIs} />
-        </section>
+        {projectData.screenshotURIs.length > 0 && (
+          <section className="my-12">
+            <h2 className="mb-4 text-xl font-semibold">Gallery</h2>
+            <ProjectGallery screenshotURIs={projectData.screenshotURIs} />
+          </section>
+        )}
 
         <section className="my-12">
           <h2 className="mb-4 text-xl font-semibold">Description</h2>

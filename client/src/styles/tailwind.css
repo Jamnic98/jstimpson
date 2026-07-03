@@ -56,3 +56,7 @@
 p {
   margin-bottom: 1em;
 }
+
+* {
+  user-select: none;
+}

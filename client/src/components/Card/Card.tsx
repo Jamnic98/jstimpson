@@ -12,10 +12,10 @@ const cardImgDimensions = { width: 300, height: 300 }
 export interface CardProps {
   title: string
   description: string
-  imageURI: string
+  imageURI?: string // now optional — falls back to filename placeholder when absent
   linkURI: string
   tag?: string // e.g. "REACT", "PYTHON" — shown as a mono label under the description
-  fileLabel?: string // e.g. "render.png", "alt-world.tsx" — shown as a caption over the image
+  fileLabel?: string // e.g. "render.png", "alt-world.tsx" — caption over image, or the placeholder text itself when there's no image
   dateRange?: string // placeholder until dateStarted/dateRange exists on Project
   liveURL?: string
 }
@@ -40,31 +40,41 @@ export const Card: React.FC<CardProps> = ({
       <Link href={linkURI} className="flex grow flex-col">
         {/* Image Container */}
         <div className="relative aspect-square w-full overflow-hidden">
-          {loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
-              <Loader />
-            </div>
-          )}
-
-          <Image
-            src={imageURI}
-            alt={title}
-            className={`h-full w-full object-cover transition-opacity duration-300 ${
-              loading ? 'opacity-0' : 'opacity-100'
-            }`}
-            width={cardImgDimensions.width}
-            height={cardImgDimensions.height}
-            onLoad={() => setLoading(false)}
-          />
-
-          {/* Scrim + filename caption, matches the render/viewport treatment used elsewhere */}
-          {fileLabel && !loading && (
+          {imageURI ? (
             <>
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-linear-to-t from-black/55 to-transparent" />
-              <span className="absolute bottom-2 left-2.5 font-mono text-[10px] tracking-wide text-white">
-                {fileLabel}
-              </span>
+              {loading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
+                  <Loader />
+                </div>
+              )}
+
+              <Image
+                src={imageURI}
+                alt={title}
+                className={`h-full w-full object-cover transition-opacity duration-300 ${
+                  loading ? 'opacity-0' : 'opacity-100'
+                }`}
+                width={cardImgDimensions.width}
+                height={cardImgDimensions.height}
+                onLoad={() => setLoading(false)}
+              />
+
+              {/* Scrim + filename caption, matches the render/viewport treatment used elsewhere */}
+              {fileLabel && !loading && (
+                <>
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-linear-to-t from-black/55 to-transparent" />
+                  {/* <span className="absolute bottom-2 left-2.5 font-mono text-[10px] tracking-wide text-white">
+                    {fileLabel}
+                  </span> */}
+                </>
+              )}
             </>
+          ) : (
+            // No screenshots — same treatment as FeaturedProjectCard's filename block,
+            // just filling the full aspect-square slot instead of a fixed h-24.
+            <div className="flex h-full w-full items-center justify-center bg-[#0B0D0C] px-4">
+              <span className="truncate font-mono text-[11px] text-orange-500/80">{fileLabel}</span>
+            </div>
           )}
         </div>
 
