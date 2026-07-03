@@ -16,18 +16,18 @@ export default function threeD() {
         title={pageTitle}
         description="A collection of 3D models and renders I created using the computer graphics software Blender."
       />
-      <article className="mb-16">
-        <section className="my-12">
-          <h2 className="mb-8 text-4xl font-semibold">Dice</h2>
 
-          <h3 className="text-2xl">3D Model</h3>
-          <hr className="my-4 border-gray-300" />
+      <article className="mb-16 text-white">
+        <section className="my-12">
+          <h2 className="mb-4 text-xl font-semibold px-4">6 Sided Die</h2>
+          {/* <h3 className="text-lg">3D Model</h3> */}
+          {/* <hr className="my-4 border-gray-300" /> */}
           <DiceModelViewer />
         </section>
 
         <section className="my-12">
-          <h3 className="text-2xl">Renders</h3>
-          <hr className="my-4 border-gray-300" />
+          <h3 className="mb-4 text-xl">Renders</h3>
+          {/* <hr className="my-4 border-gray-300" /> */}
           <ProjectGallery
             screenshotURIs={[
               `${diceImageFolder}/action_dice.webp`,
@@ -42,17 +42,19 @@ export default function threeD() {
         </section>
 
         <section className="my-12">
-          <h3 className="text-2xl">Description</h3>
-          <hr className="my-4 border-gray-300" />
-          <p className="mb-4 text-justify text-xl">
+          <h3 className="mb-4 text-xl">Description</h3>
+
+          {/* <hr className="my-4 border-gray-300" /> */}
+
+          <p className="text-gray-600 mb-4 text-justify">
             This model went through a couple of iterations before I settled on the final design.
             Getting the right combination of lighting and materials for the dice was also
-            challenging as I wanted the dice to appear as realistic as possible. By experimented
-            with different lighting, backgrounds, camera angles and materials, I was able to achieve
-            a look that I was happy with. I rendered many images of the dice, but have only included
-            a few of my favorites here.
+            challenging as I wanted them to appear as realistic as possible. By experimented with
+            different lighting, backgrounds, camera angles and materials, I was able to achieve a
+            look that I was happy with. I rendered many images of the dice, but have only included a
+            few of my favorites here.
           </p>
-          <p className="mb-4 text-justify text-xl">
+          <p className="text-gray-600 mb-4 text-justify">
             My favourite part of this project was trying to personify the dice and give them a sense
             of character—especially in the shots where they're lying on the ground together. By
             placing two dice close together and rotating them so the dots face the camera, they
@@ -60,7 +62,7 @@ export default function threeD() {
           </p>
         </section>
 
-        {/* <section className="my-12 text-xl text-red-950">*** more coming soon! ***</section> */}
+        {/* <section className="my-12  text-red-950">*** more coming soon! ***</section> */}
       </article>
     </>
   )

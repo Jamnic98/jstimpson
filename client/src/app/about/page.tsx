@@ -1,5 +1,5 @@
 import { type Metadata } from 'next'
-import Image from 'next/image'
+// import Image from 'next/image'
 import Link from 'next/link'
 
 import {
@@ -7,10 +7,10 @@ import {
   AI_HACKATHON_URL,
   PERSONAL_LINKEDIN_URL,
   PERSONAL_GITHUB_URL,
-  PROFILE_PICTURE_FOLDER_PATH,
+  // PROFILE_PICTURE_FOLDER_PATH,
 } from '@/utils/constants'
 
-const profilePictureDimensions = { width: 330, height: 330 }
+// const profilePictureDimensions = { width: 250, height: 250 }
 
 export const metadata: Metadata = {
   title: 'About Me',
@@ -18,8 +18,8 @@ export const metadata: Metadata = {
 
 export default function About() {
   return (
-    <article className="-mt-8">
-      <section className="my-12">
+    <article className="-mt-8 text-white">
+      {/*       <section className="my-12">
         <div className="mb-8 flex justify-center">
           <Image
             src={`${PROFILE_PICTURE_FOLDER_PATH}/me.webp`}
@@ -33,10 +33,11 @@ export default function About() {
           />
         </div>
         <hr className="my-4 border-gray-300" />
-      </section>
+      </section> */}
+
       <section className="my-12">
-        <h2 className="mb-4 text-3xl font-semibold">Intro</h2>
-        <p className="mb-4 text-justify text-xl">
+        <h2 className="mb-4 text-xl font-semibold">Intro</h2>
+        <p className="mb-4 text-justify text-lg text-gray-500">
           I'm a Full-Stack Software Engineer and tech enthusiast, based in London. Connect with me
           on
           <>
@@ -45,7 +46,7 @@ export default function About() {
               href={PERSONAL_LINKEDIN_URL}
               target="_blank"
               rel="noreferrer"
-              className="text-orange-600 hover:text-gray-950"
+              className="text-orange-800 hover:text-gray-400"
             >
               LinkedIn
             </a>{' '}
@@ -57,7 +58,7 @@ export default function About() {
               href={PERSONAL_GITHUB_URL}
               target="_blank"
               rel="noreferrer"
-              className="text-orange-600 hover:text-gray-950"
+              className="text-orange-800 hover:text-gray-400"
             >
               GitHub
             </a>{' '}
@@ -66,8 +67,8 @@ export default function About() {
         </p>
       </section>
       <section className="my-12">
-        <h2 className="mb-4 text-3xl font-semibold">Coding Experience</h2>
-        <p className="mb-4 text-justify text-xl">
+        <h2 className="mb-4 text-xl font-semibold">Coding Experience</h2>
+        <p className="mb-4 text-justify text-lg text-gray-500">
           TypeScript and Python are the langauges I excell with, having used them both commercially
           and personally to build performant and scalable full-stack web applications, with tools
           like React, Node.js, Flask and FastAPI. During my 2.5 years at Qudo, I gained exposure to
@@ -78,21 +79,21 @@ export default function About() {
           medication data, which involved writing a GraphQL API to fetch data from a DynamoDB
           database.
         </p>
-        <p className="mb-4 text-justify text-xl">
+        <p className="mb-4 text-justify text-lg text-gray-500">
           As Lead AI developer at GeniusLead, I led a small team of junior team members to build
           bespoke voice applications for Alexa and Google Hub devices. I was also responisble for my
           building my own projects, deploying them to AWS Lambda, the Alexa Store and Google Cloud
           Platform. The main project I worked on was an app for pilots to help them prepare for a
           flight by querying the METAR and TAF weather reports for a specific airport.
         </p>
-        <p className="mb-4 text-justify text-xl">
+        <p className="mb-4 text-justify text-lg text-gray-500">
           I have also completed a number of online courses, including an Advanced Python course, an
           Intermediate Machine Learning course and a Python for Data Science course. I enjoy coding
           in my free time and have completed a number of projects in various languages. Take a look
           at some of the personal
           <>
             {' '}
-            <Link className="text-orange-600 hover:text-gray-950" href="/coding">
+            <Link className="text-orange-800 hover:text-gray-400" href="/coding">
               coding projects
             </Link>{' '}
             I have worked on.
@@ -100,24 +101,13 @@ export default function About() {
         </p>
       </section>
       <section className="my-12">
-        <h2 className="mb-4 text-3xl font-semibold">Hackathon Win</h2>
-        <p className="mb-4 text-justify text-xl">
-          On the 8th of March 2024 I participated in the largest
-          <>
-            {' '}
-            <a
-              href={AI_HACKATHON_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="text-orange-600 hover:text-gray-950"
-            >
-              AI Hackathon
-            </a>{' '}
-          </>
-          event in London. The event ran for 3 days, and 600+ applicants joined to compete for a
-          total cash pool of £20,000.
+        <h2 className="mb-4 text-xl font-semibold">Hackathon Win</h2>
+        <p className="mb-4 text-justify text-lg text-gray-500">
+          On the 8th of March 2024 I participated in the largest AI Hackathon event in London,
+          hosted by Encode Club. The event ran for 3 days, and 600+ applicants joined to compete for
+          a total cash pool of £20,000.
         </p>
-        <p className="mb-4 text-justify text-xl">
+        <p className="mb-4 text-justify text-lg text-gray-500">
           Alongside two other developers, we secured 1st place for the &quot;Most promising AI x
           Crypto Build&quot; bounty, with an AI generated, text-based game generator called
           <>
@@ -126,7 +116,7 @@ export default function About() {
               href={AI_ADVENTURE_WRLD_GITHUB_URL}
               target="_blank"
               rel="noreferrer"
-              className="text-orange-600 hover:text-gray-950"
+              className="text-orange-800 hover:text-gray-400"
             >
               AI Adventure World.
             </a>{' '}
@@ -135,15 +125,15 @@ export default function About() {
         </p>
       </section>
       <section className="my-12">
-        <h2 className="mb-4 text-3xl font-semibold">Running and Marathon</h2>
-        <p className="mb-4 text-justify text-xl">
+        <h2 className="mb-4 text-xl font-semibold">Running and Marathon</h2>
+        <p className="mb-4 text-justify text-lg text-gray-500">
           Since late 2020, I have developed a regular running routine, aspiring to one day complete
           an ultramarathon (&#8805;50km).
         </p>
-        <p className="mb-4 text-justify text-xl">
+        <p className="mb-4 text-justify text-lg text-gray-500">
           On the 22nd of October 2023, I ran the Battersea Park Marathon and raised £275 for The
           Alzheimer&apos;s Society! To explore my activity stats, click{' '}
-          <Link className="text-orange-600 hover:text-gray-950" href="/logs">
+          <Link className="text-orange-800 hover:text-gray-400" href="/logs/running">
             here
           </Link>
           .

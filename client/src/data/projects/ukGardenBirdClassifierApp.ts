@@ -38,7 +38,7 @@ const ukGardenBirdClassifierApp: Project = {
     {
       URL: `https://github.com/Jamnic98/${projectId}`,
       label: 'GitHub Repo',
-      type: LinkType.EXTERNAL,
+      type: LinkType.REPO,
     },
   ],
   techStack: ['Python', 'Pytorch', 'Onnx', 'FastAPI', 'Jinja2'],

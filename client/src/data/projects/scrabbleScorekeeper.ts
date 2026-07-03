@@ -29,12 +29,12 @@ const scrabbleScorekeeper: Project = {
     {
       label: 'Live App',
       URL: `https://${projectId}.netlify.app/`,
-      type: LinkType.EXTERNAL,
+      type: LinkType.LIVE,
     },
     {
       label: 'GitHub Repo',
       URL: `https://github.com/Jamnic98/${projectId}`,
-      type: LinkType.EXTERNAL,
+      type: LinkType.REPO,
     },
   ],
   techStack: ['React', 'TypeScript', 'HTML', 'CSS'],

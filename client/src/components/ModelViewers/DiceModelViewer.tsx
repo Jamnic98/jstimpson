@@ -62,7 +62,7 @@ export const DiceModelViewer = () => {
     scene.add(rimLight)
 
     // Set the background colour of the scene
-    scene.background = new THREE.Color(0xeeeeee)
+    // scene.background = new THREE.Color(0xeeeeee)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(width, height)
@@ -83,7 +83,7 @@ export const DiceModelViewer = () => {
     loader.load(
       modelPath,
       (gltf) => {
-        gltf.scene.scale.set(1, 1, 1) // Scale the model
+        gltf.scene.scale.set(0.9, 0.9, 0.9) // Scale the model
         diceRef.current = gltf.scene
         scene.add(gltf.scene)
         setLoading(false)
@@ -99,7 +99,7 @@ export const DiceModelViewer = () => {
     const animate = () => {
       if (diceRef.current) {
         diceRef.current.rotation.x += 0.001
-        diceRef.current.rotation.y += 0.001
+        diceRef.current.rotation.y += 0.002
         diceRef.current.rotation.z += 0.0005
       }
 

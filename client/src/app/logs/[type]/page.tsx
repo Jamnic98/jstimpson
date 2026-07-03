@@ -40,7 +40,7 @@ export default async function Page(props: LogsProps) {
   return (
     <>
       <PageHeader title={content.title} description={content.description} />
-      <article className="mb-16">
+      <article className="mb-16 text-white">
         {/* <section className="my-12">
           <p className="mb-4 text-justify text-xl">{content.description}</p>
           <p className="mb-4 text-justify text-xl">{content.routineText}</p>

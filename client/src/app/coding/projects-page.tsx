@@ -24,9 +24,9 @@ export default function ProjectsPage() {
         description="A collection of personal programming projects I’ve built."
       />
 
-      <article className="mb-8">
+      <article className="my-8">
         <section className="my-4">
-          <label className="mb-4 block text-xl">Filter by coding language:</label>
+          <label className="mb-4 block text-lg text-gray-600">Filter by coding language:</label>
           <Select defaultValue="All" items={projectCodingLanguages} onChange={setLanguage} />
 
           <ProjectsCarousel items={filteredProjects} />

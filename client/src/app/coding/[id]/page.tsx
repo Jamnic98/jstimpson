@@ -24,49 +24,48 @@ const Page = async (props: ProjectProps) => {
   return (
     <>
       <PageHeader title={projectData.title} description={projectData.summary} />
-      <article className="mb-16">
+
+      <article className="mb-16 text-white">
         <section className="my-12">
-          <p className="mb-4 text-xl">
-            <span className="font-semibold text-orange-600">Tech stack: </span>
-            {projectData.techStack.map((tech: string) => tech).join(', ')}
+          <p className="mb-4 text-lg space-x-4">
+            <span className="font-semibold">Tech stack: </span>
+            <span className="font-mono text-emerald-400">
+              {projectData.techStack.map((tech: string) => tech).join(', ')}
+            </span>
           </p>
         </section>
 
         {projectData.links.length ? (
           <section className="my-12">
-            <h2 className="text-2xl font-semibold">Project Links</h2>
-            <hr className="my-4 border-gray-300" />
+            {/* <h2 className="mb-4 text-xl font-semibold">Project Links</h2> */}
             <ProjectLinks links={projectData.links} />
           </section>
         ) : null}
 
         <section className="my-12">
-          <h2 className="text-2xl font-semibold">Gallery</h2>
-          <hr className="my-4 border-gray-300" />
+          <h2 className="mb-4 text-xl font-semibold">Gallery</h2>
           <ProjectGallery screenshotURIs={projectData.screenshotURIs} />
         </section>
 
         <section className="my-12">
-          <h2 className="text-2xl font-semibold">Description</h2>
-          <hr className="my-4 border-gray-300" />
+          <h2 className="mb-4 text-xl font-semibold">Description</h2>
           <ProjectDescriptions paragraphs={projectData.paragraphs} />
         </section>
 
         {readme ? (
           <section className="my-12">
-            <h2 className="text-2xl font-semibold">GitHub ReadMe</h2>
-            <hr className="my-4 border-gray-300" />
-            <div className=" p-6 bg-gray-200">
+            <h2 className="mb-4 text-xl font-semibold">GitHub ReadMe</h2>
+            <div className=" p-6 bg-neutral-200">
               <Markdown content={readme ?? ''} />
             </div>
           </section>
         ) : null}
 
         <Link
-          className="flex w-fit space-x-2 rounded bg-neutral-50 px-12 py-2 text-xl leading-none font-medium text-orange-600 shadow hover:text-gray-950"
+          className="flex w-fit space-x-2 rounded text-lg leading-none tracking-wide font-medium text-orange-600 font-mono shadow hover:text-gray-400"
           href="/coding"
         >
-          <LuMoveLeft className="text-2xl" /> <span>projects</span>
+          <LuMoveLeft className="text-xl" /> <span>projects</span>
         </Link>
       </article>
     </>

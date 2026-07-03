@@ -31,7 +31,7 @@ const eyeTracker: Project = {
     {
       label: 'GitHub Repo',
       URL: `https://github.com/Jamnic98/${projectId}`,
-      type: LinkType.EXTERNAL,
+      type: LinkType.REPO,
     },
   ],
   techStack: ['TypeScript', 'Python', 'Tensorflow.js', 'Chart.js', 'FastApi', 'MongoDB'],

@@ -5,7 +5,8 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5'
 
 import { Card } from '@/components'
 import { useWidth } from '@/utils'
-import { type Project } from '@/types'
+import { extMap } from '@/utils/constants'
+import { LinkType, type Project } from '@/types'
 
 interface ProjectsCarouselProps {
   items: Project[]
@@ -57,7 +58,8 @@ export const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
 
   if (width == null) return null
 
-  const progressPercent = totalPages > 1 ? (currentPage / (totalPages - 1)) * 100 : 100
+  // zero-padded, matches PAGE 01 / 04 from the spec rather than PAGE 1 / 4
+  const pad = (n: number) => String(n).padStart(2, '0')
 
   return (
     <div>
@@ -71,6 +73,9 @@ export const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
                   description={projectData.summary}
                   imageURI={projectData.screenshotURIs[0]}
                   linkURI={`/coding/${projectData.id}`}
+                  tag={projectData.mainLanguage[0]}
+                  fileLabel={`${projectData.id}.${extMap[projectData.mainLanguage[0]] ?? 'tsx'}`}
+                  liveURL={projectData.links?.find((link) => link.type === LinkType.LIVE)?.URL}
                 />
               </div>
             ))}
@@ -78,36 +83,31 @@ export const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
         ))}
       </div>
 
-      <div className="mt-4 flex items-center justify-center space-x-6">
+      <div className="flex items-center justify-center gap-4 font-mono text-[11px] text-neutral-500">
         <button
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 0))}
           disabled={currentPage === 0}
-          className="rounded-full p-2 transition hover:cursor-pointer hover:bg-gray-200 disabled:opacity-30"
+          className="flex h-7 w-7 items-center justify-center rounded-md border border-neutral-300
+            transition-colors hover:border-orange-500 hover:text-orange-600 disabled:opacity-30
+            disabled:hover:border-neutral-300 disabled:hover:text-neutral-500 cursor-pointer"
         >
-          <IoChevronBack className="h-6 w-6 text-gray-700" />
+          <IoChevronBack className="h-3.5 w-3.5" />
         </button>
 
-        {/* Progress bar */}
-        <div className="h-2 w-48 overflow-hidden rounded-full bg-gray-300">
-          <div
-            className="h-full bg-orange-600 transition-all"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-
-        <div className="text-base text-gray-700">
-          Showing <span className="font-semibold">{items.length}</span> project
-          {items.length !== 1 && 's'} · Page{' '}
-          <span className="font-semibold">{currentPage + 1}</span> of{' '}
-          <span className="font-semibold">{totalPages}</span>
-        </div>
+        <span className="uppercase tracking-[0.08em]">
+          page {pad(currentPage + 1)} / {pad(totalPages)}
+          <span className="mx-2 text-neutral-300">·</span>
+          {items.length} project{items.length !== 1 && 's'}
+        </span>
 
         <button
           onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages - 1))}
           disabled={currentPage === totalPages - 1}
-          className="rounded-full p-2 transition hover:cursor-pointer hover:bg-gray-200 disabled:opacity-30"
+          className="flex h-7 w-7 items-center justify-center rounded-md border border-neutral-300
+            transition-colors hover:border-orange-500 hover:text-orange-600 disabled:opacity-30
+            disabled:hover:border-neutral-300 disabled:hover:text-neutral-500 cursor-pointer"
         >
-          <IoChevronForward className="h-6 w-6 text-gray-700" />
+          <IoChevronForward className="h-3.5 w-3.5" />
         </button>
       </div>
     </div>

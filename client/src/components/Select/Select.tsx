@@ -50,11 +50,11 @@ export const Select: React.FC<SelectProps> = ({ defaultValue, items, onChange })
     <div className="relative" ref={selectRef}>
       {/* Select Bar */}
       <div
-        className={`${hideDropdown ? 'rounded shadow' : 'rounded-t-sm'} flex cursor-pointer items-center justify-between bg-neutral-50 px-4 py-1`}
+        className={`${hideDropdown ? 'rounded shadow' : 'rounded-t-sm'} flex cursor-pointer items-center justify-between bg-neutral-800 px-4 py-1`}
         onClick={handleOnSelectClick}
         data-testid="select"
       >
-        <span className="text-xl font-medium text-gray-950">{selectedItem}</span>
+        <span className="text-lg font-medium text-emerald-400">{selectedItem}</span>
 
         <div className="flex items-center space-x-2">
           {/* Clear Button */}
@@ -64,17 +64,17 @@ export const Select: React.FC<SelectProps> = ({ defaultValue, items, onChange })
                 e.stopPropagation()
                 handleClear()
               }}
-              className="rounded p-1 text-gray-500 hover:cursor-pointer hover:bg-gray-200 hover:text-gray-900"
+              className="rounded p-1 text-gray-500 hover:cursor-pointer hover:bg-orange-600 hover:text-gray-900"
               aria-label="Clear selection"
               data-testid="clear-button"
             >
-              <IoClose className="h-5 w-5 text-2xl" />
+              <IoClose className="h-5 w-5 text-lg" />
             </button>
           )}
 
           {/* Dropdown icon */}
           <BsCaretDownFill
-            className={`font-bold text-gray-950 transition-transform ${hideDropdown ? '' : 'rotate-180'}`}
+            className={`font-bold text-gray-200 transition-transform ${hideDropdown ? '' : 'rotate-180'}`}
             data-testid="dropdown-icon"
           />
         </div>
@@ -92,12 +92,12 @@ export const Select: React.FC<SelectProps> = ({ defaultValue, items, onChange })
             <div
               key={index}
               onClick={() => handleOnOptionClick(item)}
-              className={`hover:text-neutral-light cursor-pointer bg-neutral-50 px-4 py-1 text-gray-950 hover:bg-orange-600 ${
+              className={`hover:text-neutral-light cursor-pointer bg-neutral-800 px-4 py-1 text-gray-500 hover:bg-orange-600 ${
                 index === arr.length - 1 ? 'rounded-b shadow' : ''
               }`}
               data-testid="select-option"
             >
-              <span className="text-xl font-medium">{item}</span>
+              <span className="font-medium">{item}</span>
             </div>
           ))}
       </div>

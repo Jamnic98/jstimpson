@@ -1,4 +1,6 @@
 export enum LinkType {
+  LIVE = 'live',
+  REPO = 'repo',
   EXTERNAL = 'external',
   INTERNAL = 'internal',
 }

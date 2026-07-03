@@ -76,12 +76,14 @@ export const Histogram: React.FC<HistogramProps> = ({ data, xAxisObj, yAxisObj }
       .attr('y', (d) => y(d.length))
       .attr('width', (d) => Math.max(0, x(d.x1!) - x(d.x0!) - 1))
       .attr('height', (d) => height - y(d.length))
-      .style('fill', '#f54900')
+      .style('fill', '#92400e')
 
     // Append X axis
     svgElement
       .append('g')
       .attr('class', 'x axis')
+      .attr('color', '#6a7282')
+      .style('font-size', '6px')
       .attr('transform', `translate(0, ${height})`)
       .call(
         d3
@@ -98,13 +100,17 @@ export const Histogram: React.FC<HistogramProps> = ({ data, xAxisObj, yAxisObj }
     // X axis label
     svgElement
       .append('text')
-      .attr('transform', 'translate(' + width / 2 + ' ,' + (height + margins.top) + ')')
+      .attr(
+        'transform',
+        'translate(' + width / 2 + ' ,' + (height + margins.top + xAxisObj.labelOffset) + ')'
+      )
       .style('text-anchor', 'middle')
-      .style('font', '0.5em arial')
+      .style('font', '0.35em arial')
+      .style('fill', '#6a7282')
       .text(xAxisObj.label)
 
     // Append Y axis
-    svgElement.append('g').call(d3.axisLeft(y))
+    svgElement.append('g').attr('color', '#6a7282').style('font-size', '6px').call(d3.axisLeft(y))
 
     // Y axis label
     svgElement
@@ -114,13 +120,14 @@ export const Histogram: React.FC<HistogramProps> = ({ data, xAxisObj, yAxisObj }
       .attr('y', -margins.left + yAxisObj.labelOffset)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .style('font', '0.5em arial')
+      .style('font', '0.35em arial')
+      .style('fill', '#6a7282')
       .text(yAxisObj.label)
   }, [data, xAxisObj, yAxisObj, width, height, margins.left, margins.top])
 
   return (
     <div id="svgContainer">
-      <svg viewBox="-45 -5 400 178" ref={ref} />
+      <svg viewBox="-45 -20 400 195" ref={ref} />
     </div>
   )
 }

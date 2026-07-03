@@ -68,7 +68,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
       .attr('y1', (d) => y(d[1]))
       .attr('x2', (d) => x(d[2]))
       .attr('y2', (d) => y(d[3]))
-      .attr('stroke', 'black')
+      .attr('stroke', '#34d399')
       .attr('stroke-width', 0.5)
 
     // add data
@@ -80,8 +80,8 @@ export const LineGraph: React.FC<LineGraphProps> = ({
       .append('circle')
       .attr('cx', (d: { x: Date; y: number }) => x(new Date(d.x)))
       .attr('cy', (d: { x: Date; y: number }) => y(d.y))
-      .attr('r', 1)
-      .style('fill', '#f54900')
+      .attr('r', 1.2)
+      .style('fill', '#92400e')
   })
 
   const configureXAxis = (
@@ -107,11 +107,13 @@ export const LineGraph: React.FC<LineGraphProps> = ({
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + height + ')')
       .call(xAxis)
+      .attr('color', '#6a7282')
       .selectAll('text')
       .style('text-anchor', 'end')
       .attr('dx', '-.8em')
       .attr('dy', '.1em')
       .attr('transform', 'rotate(-60)')
+      .style('font-size', '6px')
 
     // text label for the x axis
     svgElement
@@ -121,7 +123,8 @@ export const LineGraph: React.FC<LineGraphProps> = ({
         'translate(' + width / 2 + ' ,' + (height + margins.top + xAxisObj.labelOffset) + ')'
       )
       .style('text-anchor', 'middle')
-      .style('font', '0.5em arial')
+      .style('font', '0.35em arial')
+      .style('fill', '#6a7282')
       .text(xAxisObj.label)
 
     return x
@@ -143,7 +146,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
 
     // format the y axis
     const yAxis = d3.axisLeft(y)
-    svgElement.append('g').call(yAxis)
+    svgElement.append('g').attr('color', '#6a7282').style('font-size', '6px').call(yAxis)
 
     // text label for the y axis
     svgElement
@@ -153,7 +156,8 @@ export const LineGraph: React.FC<LineGraphProps> = ({
       .attr('y', +yAxisObj.labelOffset - margins.left)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .style('font', '0.5em arial')
+      .style('font', '0.35em arial')
+      .style('fill', '#6a7282')
       .text(yAxisObj.label)
 
     return y
@@ -161,7 +165,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
 
   return (
     <div id="svgContainer">
-      <svg viewBox="-45 -5 400 195" ref={ref} />
+      <svg viewBox="-45 -20 400 210" ref={ref} />
     </div>
   )
 }

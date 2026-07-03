@@ -64,7 +64,7 @@ export const ScatterGraph: React.FC<ScatterGraphProps> = ({ data, xAxisObj, yAxi
       .attr('y1', (d) => y(d[1]))
       .attr('x2', (d) => x(d[2]))
       .attr('y2', (d) => y(d[3]))
-      .attr('stroke', 'black')
+      .attr('stroke', '#34d399')
       .attr('stroke-width', 0.5)
 
     // Add points
@@ -77,7 +77,7 @@ export const ScatterGraph: React.FC<ScatterGraphProps> = ({ data, xAxisObj, yAxi
       .attr('cx', (d: { x: number; y: number; start_date_local: Date }) => x(d.x))
       .attr('cy', (d: { x: number; y: number; start_date_local: Date }) => y(d.y))
       .attr('r', 1)
-      .style('fill', '#f54900')
+      .style('fill', '#92400e')
   })
 
   const configureXAxis = (
@@ -99,13 +99,16 @@ export const ScatterGraph: React.FC<ScatterGraphProps> = ({ data, xAxisObj, yAxi
       .append('g')
       .attr('transform', 'translate(0,' + height + ')')
       .call(xAxis)
+      .attr('color', '#6a7282')
+      .style('font-size', '6px')
 
     // text label for the x axis
     svgElement
       .append('text')
       .attr('transform', 'translate(' + width / 2 + ' ,' + (height + margins.top) + ')')
       .style('text-anchor', 'middle')
-      .style('font', '0.5em arial')
+      .style('font', '0.35em arial')
+      .attr('fill', '#6a7282')
       .text(xAxisObj.label)
 
     return x
@@ -131,7 +134,7 @@ export const ScatterGraph: React.FC<ScatterGraphProps> = ({ data, xAxisObj, yAxi
     const yAxis = d3.axisLeft(y)
     yAxis.tickFormat((d) => yAxisObj.labelFormatter(d as number))
 
-    svgElement.append('g').call(yAxis)
+    svgElement.append('g').attr('color', '#6a7282').style('font-size', '6px').call(yAxis)
 
     // text label for the y axis
     svgElement
@@ -141,7 +144,8 @@ export const ScatterGraph: React.FC<ScatterGraphProps> = ({ data, xAxisObj, yAxi
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .style('font', '0.5em arial')
+      .style('font', '0.35em arial')
+      .style('fill', '#6a7282')
       .text(yAxisObj.label)
 
     return y
@@ -149,7 +153,7 @@ export const ScatterGraph: React.FC<ScatterGraphProps> = ({ data, xAxisObj, yAxi
 
   return (
     <div id="svgContainer">
-      <svg viewBox="-45 -5 400 178" ref={ref} />
+      <svg viewBox="-45 -20 400 195" ref={ref} />
     </div>
   )
 }

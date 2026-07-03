@@ -5,15 +5,15 @@ import { PERSONAL_GITHUB_URL, PERSONAL_LINKEDIN_URL } from '@/utils'
 export const Footer: React.FC = () => (
   <div
     id="footer"
-    className="sticky inset-x-0 top-[100vh] flex h-20 items-center justify-center bg-gray-950"
+    className="sticky inset-x-0 top-[100vh] flex h-20 items-center justify-center select-none"
     aria-label="footer"
   >
-    <nav className="text-neutral flex space-x-8 text-4xl">
+    <nav className="text-neutral flex space-x-16 text-2xl">
       <a
         href={PERSONAL_GITHUB_URL}
         target="_blank"
         rel="noreferrer"
-        className="hover:text-orange-600"
+        className="hover:text-orange-800"
       >
         <FaGithub />
       </a>
@@ -21,7 +21,7 @@ export const Footer: React.FC = () => (
         href={PERSONAL_LINKEDIN_URL}
         target="_blank"
         rel="noreferrer"
-        className="hover:text-orange-600"
+        className="hover:text-orange-800"
       >
         <FaLinkedin />
       </a>

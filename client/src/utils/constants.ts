@@ -2,9 +2,10 @@ import type { NavLinkData } from '@/types'
 
 export const navLinkDataArr: NavLinkData[] = [
   { label: 'coding', url: '/coding', children: [] },
+  { label: '3D', url: '/3d', children: [] },
   {
     label: 'logs',
-    url: '/logs',
+    url: '/logs/running',
     children: [
       { label: 'running', url: '/logs/running', children: [] },
       { label: 'cycling', url: '/logs/cycling', children: [] },
@@ -13,7 +14,6 @@ export const navLinkDataArr: NavLinkData[] = [
       // { label: 'reading', url: '/logs/reading', children: [] }
     ],
   },
-  { label: '3D', url: '/3d', children: [] },
   { label: 'about ', url: '/about', children: [] },
 ]
 
@@ -52,4 +52,14 @@ export const projectImagesFolderPaths = {
   ticTacGo: `${PROJECT_IMAGES_FOLDER_PATH}/tic-tac-go`,
   typation: `${PROJECT_IMAGES_FOLDER_PATH}/typation`,
   ukGardenBirdClassifierApp: `${PROJECT_IMAGES_FOLDER_PATH}/uk-garden-bird-classifier-app`,
+}
+
+export const extMap: Record<string, string> = {
+  TypeScript: 'tsx',
+  JavaScript: 'jsx',
+  Python: 'py',
+  'C++': 'cpp',
+  HTML: 'html',
+  CSS: 'css',
+  Golang: 'go',
 }

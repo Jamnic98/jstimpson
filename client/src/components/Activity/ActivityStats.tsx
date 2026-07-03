@@ -10,54 +10,50 @@ import { type ActivityData } from '@/types'
 
 interface ActivityStatsProps {
   activityData: ActivityData[]
-  type: string
+  unit: 'metric' | 'imperial'
 }
 
-export const ActivityStats: React.FC<ActivityStatsProps> = ({ activityData, type }) => {
+export const ActivityStats: React.FC<ActivityStatsProps> = ({ activityData, unit }) => {
+  if (activityData.length === 0) {
+    return <p className="font-mono text-xs text-neutral-300 mt-4 ml-4">No activities logged yet</p>
+  }
+
   const distanceList = activityData.map((a) => a.distance)
-  const furthestDistanceInMeters = distanceList.length ? Math.max(...distanceList) : 0
-  const totalDistanceInMeters = distanceList.length ? distanceList.reduce(reduceSumFunc) : 0
+  const furthestDistanceInMeters = Math.max(...distanceList)
+  const totalDistanceInMeters = distanceList.reduce(reduceSumFunc)
 
   const durationList = activityData.map((a) => a.moving_time)
-  const totalDurationInSeconds = durationList.length ? durationList.reduce(reduceSumFunc) : 0
-
-  const displayType = type === 'Run' ? 'Run' : type === 'Ride' ? 'Ride' : type
+  const totalDurationInSeconds = durationList.reduce(reduceSumFunc)
 
   return (
-    <ul className="grid list-inside list-disc grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4 p-0">
-      <li className="text-2xl text-orange-600">
-        <span className="text-xl text-gray-950">
-          {getTotalDistanceString(totalDistanceInMeters)}
+    <ul className="grid list-inside list-disc grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-1 p-0 font-mono">
+      <li className="text-emerald-400">
+        <span className="text-sm text-gray-400">
+          {getTotalDistanceString(totalDistanceInMeters, unit)}
         </span>
       </li>
-      <li className="text-2xl text-orange-600">
-        <span className="text-xl text-gray-950">
-          {getFurthestDistanceString(furthestDistanceInMeters)}
+      <li className="text-emerald-400">
+        <span className="text-sm text-gray-400">
+          {getFurthestDistanceString(furthestDistanceInMeters, unit)}
         </span>
       </li>
-      <li className="text-2xl text-orange-600">
-        <span className="text-xl text-gray-950">
-          {getAverageDistanceString(
-            distanceList.length ? totalDistanceInMeters / distanceList.length : 0
-          )}
+      <li className="text-emerald-400">
+        <span className="text-sm text-gray-400">
+          {getAverageDistanceString(totalDistanceInMeters / distanceList.length, unit)}
         </span>
       </li>
-      <li className="text-2xl text-orange-600">
-        <span className="text-xl text-gray-950">
+      <li className="text-emerald-400">
+        <span className="text-sm text-gray-400">
           {getTotalDurationString(totalDurationInSeconds)}
         </span>
       </li>
-      <li className="text-2xl text-orange-600">
-        <span className="text-xl text-gray-950">
-          {getAverageDurationString(
-            durationList.length ? totalDurationInSeconds / durationList.length : 0
-          )}
+      <li className="text-emerald-400">
+        <span className="text-sm text-gray-400">
+          {getAverageDurationString(totalDurationInSeconds / durationList.length)}
         </span>
       </li>
-      <li className="text-2xl text-orange-600">
-        <span className="text-xl text-gray-950">
-          {displayType} count: {activityData.length}
-        </span>
+      <li className="text-emerald-400">
+        <span className="text-sm text-gray-400">Activity count: {activityData.length}</span>
       </li>
     </ul>
   )

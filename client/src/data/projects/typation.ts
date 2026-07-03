@@ -33,13 +33,13 @@ const typation: Project = {
   links: [
     {
       URL: `https://${projectId}.co.uk`,
-      label: 'Live Project',
-      type: LinkType.EXTERNAL,
+      label: 'Live App',
+      type: LinkType.LIVE,
     },
     {
       URL: `https://github.com/Jamnic98/${projectId}`,
       label: 'GitHub Repo',
-      type: LinkType.EXTERNAL,
+      type: LinkType.REPO,
     },
   ],
   techStack: [

@@ -26,14 +26,14 @@ const altWorld: Project = {
   mainLanguage: ['TypeScript'],
   links: [
     {
-      label: 'GitHub Repo',
-      URL: `https://github.com/Jamnic98/${projectId}`,
-      type: LinkType.EXTERNAL,
-    },
-    {
       label: 'Live App',
       URL: 'https://altworld.net',
-      type: LinkType.EXTERNAL,
+      type: LinkType.LIVE,
+    },
+    {
+      label: 'GitHub Repo',
+      URL: `https://github.com/Jamnic98/${projectId}`,
+      type: LinkType.REPO,
     },
   ],
   techStack: ['TypeScript', 'Next.js', 'TailwindCSS', 'MongoDB'],

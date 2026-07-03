@@ -1,23 +1,24 @@
-export const revalidate = 43200
-
 import { type Metadata } from 'next'
 
-import HomePage from './home-page'
+import HomePage from '@/app/home-page'
 import { fetchActivities } from '@/utils'
+import { ActivityData } from '@/types'
+
+export const revalidate = 43200
 
 export const metadata: Metadata = {
   title: 'Home',
 }
 
 export default async function Page() {
-  const now = new Date()
-  const startOfMonthUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
+  // const now = new Date()
+  // const startOfMonthUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
 
   // Fetch activities (default type optional)
-  const data = await fetchActivities(undefined, startOfMonthUTC.getTime())
+  const data = await fetchActivities(/* undefined, startOfMonthUTC.getTime() */)
 
   // Reshape to keyed by type
-  const allActivityData: Record<string, any[]> = {
+  const allActivityData: Record<string, ActivityData[]> = {
     running: [],
     cycling: [],
   }

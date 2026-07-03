@@ -38,7 +38,7 @@ const portfolioWebsite: Project = {
     {
       URL: 'https://github.com/Jamnic98/jstimpson',
       label: 'GitHub Repo',
-      type: LinkType.EXTERNAL,
+      type: LinkType.REPO,
     },
   ],
   techStack: [

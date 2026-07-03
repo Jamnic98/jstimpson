@@ -1,75 +1,73 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { IoChevronDown } from 'react-icons/io5'
+
 import { MOBILE_SCREEN_WIDTH, useWidth } from '@/utils'
 import { type NavLinkData } from '@/types'
 
 interface NavlinkProps {
   navlinkObj: NavLinkData
-  onClick?: () => void // closes mobile menu when selecting a child link
+  onClick?: () => void
 }
+
+const linkClasses = (isActive: boolean) =>
+  `relative flex items-center justify-center gap-1.5 px-4 py-3 font-mono text-sm font-semibold
+   uppercase tracking-widest transition-colors duration-300 w-full bg-neutral-50
+   ${isActive ? 'text-orange-500' : 'text-gray-600 hover:text-orange-600'}`
 
 export const NavLink: React.FC<NavlinkProps> = ({ navlinkObj, onClick }) => {
   const { label, url, children } = navlinkObj
+  const pathname = usePathname()
   const width = useWidth() || MOBILE_SCREEN_WIDTH
   const isMobile = width < MOBILE_SCREEN_WIDTH
   const [isDropdownOpen, setDropdownOpen] = useState(false)
 
-  const itemHeight = 'h-16' // all items same height
-
-  const handleParentClick = () => {
-    if (isMobile && children.length) {
-      setDropdownOpen(!isDropdownOpen)
-    }
-  }
-
-  const handleChildClick = () => {
-    if (onClick) onClick() // closes mobile menu
-    setDropdownOpen(false)
-  }
+  const isActive = pathname === url || children?.some((c) => c.url === pathname)
 
   const handleMouseEnter = () => {
-    if (!isMobile && children.length) setDropdownOpen(true)
+    if (!isMobile && children?.length) setDropdownOpen(true)
   }
-
   const handleMouseLeave = () => {
-    if (!isMobile && children.length) setDropdownOpen(false)
+    if (!isMobile && children?.length) setDropdownOpen(false)
+  }
+  const handleParentClick = () => {
+    if (isMobile && children?.length) setDropdownOpen((prev) => !prev)
   }
 
-  if (children.length) {
+  if (children?.length) {
     return (
-      <div className="w-full" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        {/* Parent tab */}
-        <span
-          onClick={handleParentClick}
-          className={`flex items-center justify-center ${itemHeight} px-4 text-2xl font-bold text-white cursor-pointer hover:bg-orange-600 w-full`}
-        >
+      <div
+        className="relative w-full bg-neutral-50"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <span onClick={handleParentClick} className={`${linkClasses(!!isActive)} cursor-pointer`}>
           {label}
-          <span
-            className={`inline-block ml-2 transition-transform duration-200 ${
+          <IoChevronDown
+            className={`h-3 w-3 transition-transform duration-200 ${
               isDropdownOpen ? 'rotate-180' : ''
             }`}
-            style={{ fontSize: '0.8em' }}
-          >
-            ▼
-          </span>
+          />
         </span>
 
-        {/* Dropdown menu */}
         <div
-          className="flex flex-col overflow-hidden transition-[max-height] duration-300 ease-out"
-          style={{
-            maxHeight: isDropdownOpen ? `${children.length * 64}px` : '0', // 64px per item
-          }}
+          className={`flex flex-col overflow-hidden transition-[max-height] duration-300 ease-out bg-neutral-50
+            ${isMobile ? '' : 'absolute left-0 top-full z-20 min-w-full rounded-md'}`}
+          style={{ maxHeight: isDropdownOpen ? `${children.length * 44}px` : '0px' }}
         >
           {children.map((child) => (
             <Link
               key={child.label}
               href={child.url}
-              onClick={handleChildClick}
-              className={`flex items-center justify-${isMobile ? 'start' : 'center'} ${itemHeight} px-4 text-2xl font-bold text-white bg-gray-950 hover:bg-orange-600 w-full`}
-              style={{ paddingLeft: isMobile ? '2rem' : '1rem' }} // optional: keep indent on mobile
+              onClick={() => {
+                setDropdownOpen(false)
+                onClick?.()
+              }}
+              className="flex h-11 items-center justify-center px-4 font-mono text-xs uppercase bg-neutral-50
+                tracking-widest text-gray-500 transition-colors hover:text-orange-500"
             >
               {child.label}
             </Link>
@@ -79,13 +77,8 @@ export const NavLink: React.FC<NavlinkProps> = ({ navlinkObj, onClick }) => {
     )
   }
 
-  // Normal link
   return (
-    <Link
-      href={url}
-      onClick={onClick}
-      className={`flex items-center justify-center ${itemHeight} px-4 text-2xl font-bold text-white hover:bg-orange-600 w-full`}
-    >
+    <Link href={url} onClick={onClick} className={linkClasses(!!isActive)}>
       {label}
     </Link>
   )

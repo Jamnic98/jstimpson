@@ -27,7 +27,7 @@ const ticTacGo: Project = {
     {
       URL: `https://github.com/Jamnic98/${ticTacGoProjectId}`,
       label: 'GitHub Repo',
-      type: LinkType.EXTERNAL,
+      type: LinkType.REPO,
     },
   ],
   techStack: ['Golang'],
