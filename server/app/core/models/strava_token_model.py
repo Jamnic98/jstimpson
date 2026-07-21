@@ -63,7 +63,7 @@ class StravaTokenModel(BaseModel):
                 raise ValueError("Unable to refresh Strava token without new token data")
 
             if new_token_data.get("errors"):
-                raise ValueError(f"{new_token_data["message"], new_token_data["errors"]}")
+                raise ValueError(f"{new_token_data['message'], new_token_data['errors']}")
 
             # Log the fetched new token data to inspect its structure
             logger.info("Fetched new Strava token data")

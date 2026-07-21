@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Dict, Any
 from datetime import datetime, timedelta
+
+import httpx
 from pydantic import ValidationError
-from requests import get
 
 from app.core.models.activity_model import ActivityCollection, ActivityModel
 from app.core.models.strava_token_model import StravaTokenModel
@@ -11,12 +12,12 @@ from app.utils import safe_str
 from app.utils.logger import logger
 
 
-async def fetch_strava_activities_data(after: int = 0) -> List[ActivityModel]:
+async def fetch_strava_activities_data(after: int = 0) -> List[Dict[str, Any]]:
     """
-        Fetches activities from Strava API after a given unix timestamp
+    Fetches activities from Strava API after a given unix timestamp
 
-        :param after: Unix timestamp of a past date
-        :return: List of Strava activities
+    :param after: Unix timestamp of a past date
+    :return: List of raw Strava activity dictionaries
     """
     logger.info("Fetching activities from Strava API")
     try:
@@ -29,16 +30,30 @@ async def fetch_strava_activities_data(after: int = 0) -> List[ActivityModel]:
         if not strava_token.is_token_valid():
             await strava_token.refresh()
 
-        # Fetch activities data from strava
-        strava_activities = get(
-            STRAVA_ACTIVITIES_API_ENDPOINT,
-            headers={"Authorization": f"Bearer {strava_token.access_token}"},
-            params={"after": after},
-            timeout=REQUEST_TIMEOUT
-        ).json()
+        # Non-blocking async HTTP request
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                STRAVA_ACTIVITIES_API_ENDPOINT,
+                headers={"Authorization": f"Bearer {strava_token.access_token}"},
+                params={"after": after},
+                timeout=REQUEST_TIMEOUT
+            )
+            response.raise_for_status()
+            strava_activities = response.json()
+
+        if not isinstance(strava_activities, list):
+            raise ValueError(f"Strava API returned unexpected payload: {strava_activities}")
 
         logger.info("Fetched %d activities", len(strava_activities))
         return strava_activities
+
+    except httpx.HTTPStatusError as e:
+        logger.error("Strava API returned HTTP error status %s: %s", e.response.status_code, e.response.text)
+        raise RuntimeError("Strava API request failed") from e
+
+    except httpx.RequestError as e:
+        logger.error("Network error while connecting to Strava API: %s", e)
+        raise RuntimeError("Network error connecting to Strava") from e
 
     except ValidationError as e:
         logger.error("Token data failed validation: %s", e)
@@ -52,40 +67,40 @@ async def fetch_strava_activities_data(after: int = 0) -> List[ActivityModel]:
 async def add_new_activities_to_db() -> List[ActivityModel]:
     logger.info("Attempting to add new activities to DB")
     try:
-        # Get a date from a day ago
+        # Get a date from a month ago
         current_date = datetime.now()
-        date_in_past = current_date - timedelta(days=1)
+        date_in_past = current_date - timedelta(days=30)
 
         # Fetch recent activities from DB using past date
         query = {"start_date_local": {"$gte": date_in_past}}
         db_activity_data = await activities_collection.find(query).to_list(length=None)
-        db_activity_data_dates = list(db_activity["start_date_local"] for db_activity in db_activity_data)
+        db_activity_dates = {db_activity["start_date_local"] for db_activity in db_activity_data}
 
-        # Fetch recent activities from Strava's API using past date
+        # Fetch recent activities from Strava's API
         strava_activities_data = await fetch_strava_activities_data(int(date_in_past.timestamp()))
-        # Filter recent Strava activities not already in DB
-        filtered_strava_activities = list(
-            # TODO: filter by id instead of start_date_local
-            filter(lambda activity: datetime.strptime(
-                activity["start_date_local"], "%Y-%m-%dT%H:%M:%SZ"
-            ) not in db_activity_data_dates,
-                strava_activities_data
-           )
-        )
+
+        # Filter out existing activities
+        filtered_strava_activities = []
+        for activity in strava_activities_data:
+            date_str = activity.get("start_date_local")
+            if not date_str:
+                continue
+            parsed_date = datetime.fromisoformat(date_str.replace("Z", "+00:00")).replace(tzinfo=None)
+            if parsed_date not in db_activity_dates:
+                filtered_strava_activities.append(activity)
 
         if not filtered_strava_activities:
             logger.info("No new activities to upload")
             return []
 
-        # Insert new activities into DB
+        # Prepare records for Pydantic validation
         activity_data = []
         for strava_activity in filtered_strava_activities:
-            start_date_local_dt = datetime.strptime(
-                strava_activity.get("start_date_local"), "%Y-%m-%dT%H:%M:%SZ"
-            )
-            start_date_dt = datetime.strptime(
-                strava_activity.get("start_date"), "%Y-%m-%dT%H:%M:%SZ"
-            )
+            raw_local_date = strava_activity.get("start_date_local", "")
+            raw_start_date = strava_activity.get("start_date", "")
+
+            start_date_local_dt = datetime.fromisoformat(raw_local_date.replace("Z", "+00:00")).replace(tzinfo=None)
+            start_date_dt = datetime.fromisoformat(raw_start_date.replace("Z", "+00:00")).replace(tzinfo=None)
 
             activity_data.append({
                 "strava_id": safe_str(strava_activity.get("id")),
@@ -107,17 +122,20 @@ async def add_new_activities_to_db() -> List[ActivityModel]:
                 "suffer_score": strava_activity.get("suffer_score"),
             })
 
-        # Wrap list in a dict for ActivityCollection validation
+        # 1. Validate list into Pydantic models (returns List[ActivityModel])
         activities_collection_data = ActivityCollection.model_validate({"activities": activity_data})
+        pydantic_activities: List[ActivityModel] = activities_collection_data.activities
 
-        # Convert all activities to dictionaries once
-        activities_dicts = [activity.model_dump() for activity in activities_collection_data.activities]
+        # 2. Convert models to dicts specifically for MongoDB insertion
+        activities_dicts = [activity.model_dump() for activity in pydantic_activities]
 
-        # Insert the validated and dumped activities into the database
+        # 3. Insert into DB
         await activities_collection.insert_many(activities_dicts)
 
-        logger.info("Successfully inserted new activities to DB: %s", activities_dicts)
-        return activities_dicts
+        logger.info("Successfully inserted %d new activities to DB", len(pydantic_activities))
+
+        # 4. Return the List[ActivityModel] as promised by the type hint
+        return pydantic_activities
 
     except (RuntimeError, TypeError, ValidationError, ValueError) as e:
         logger.error("Failed to insert new activities to DB: %s", e)
