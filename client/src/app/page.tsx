@@ -4,8 +4,6 @@ import HomePage from '@/app/home-page'
 import { fetchActivities } from '@/utils'
 import { ActivityData } from '@/types'
 
-export const revalidate = 43200
-
 export const metadata: Metadata = {
   title: 'Home',
 }

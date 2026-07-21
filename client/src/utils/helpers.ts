@@ -15,11 +15,13 @@ export const fetchActivities = async (type?: string, timestamp?: number) => {
   }
 
   try {
-    const response = await fetch(
-      url.toString(),
-      // revalidate every 12 hours
-      { next: { revalidate: 43200 } }
-    )
+    const response = await fetch(url.toString(), {
+      next: {
+        revalidate: 43200,
+        tags: ['activities'],
+      },
+    })
+
     if (!response.ok) {
       throw new Error(`Failed to fetch activities data`)
     }

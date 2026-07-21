@@ -2,6 +2,7 @@ import { type Metadata } from 'next'
 
 import { PageHeader, ActivityDataView } from '@/components'
 import { fetchActivities } from '@/utils'
+import { activityContentMap } from '@/data/activityContent'
 
 const routeToFetchTypeMap: Record<string, 'Run' | 'Ride'> = {
   running: 'Run',
@@ -21,17 +22,15 @@ interface LogsProps {
   params: Promise<{ type: string }>
 }
 
-import { activityContentMap } from '@/data/activityContent'
-
 export default async function Page(props: LogsProps) {
   const params = await props.params
-  const typeParam = params.type
-  const fetchType = routeToFetchTypeMap[typeParam] || 'Run' // 'Run' or 'Ride'
-  const displayType = routeToDisplayMap[typeParam] // 'Running' or 'Cycling'
+  const typeParam = params.type?.toLowerCase()
+
+  const fetchType = routeToFetchTypeMap[typeParam] || 'Run'
+  const displayType = routeToDisplayMap[typeParam] || 'Running'
 
   const content = activityContentMap[fetchType] || {
     title: displayType,
-    // description: `Here is my ${displayType.toLowerCase()} data.`,
     routineText: '',
   }
 
@@ -41,13 +40,8 @@ export default async function Page(props: LogsProps) {
     <>
       <PageHeader title={content.title} description={content.description} />
       <article className="mb-16 text-white">
-        {/* <section className="my-12">
-          <p className="mb-4 text-justify text-xl">{content.description}</p>
-          <p className="mb-4 text-justify text-xl">{content.routineText}</p>
-        </section> */}
-
         <section className="my-12">
-          <ActivitiesDataSection activitiesPromise={activitiesPromise} type={params.type} />
+          <ActivitiesDataSection activitiesPromise={activitiesPromise} type={typeParam} />
         </section>
       </article>
     </>
