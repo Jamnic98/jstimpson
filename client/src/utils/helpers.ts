@@ -17,7 +17,7 @@ export const fetchActivities = async (type?: string, timestamp?: number) => {
   try {
     const response = await fetch(url.toString(), {
       next: {
-        revalidate: 43200,
+        revalidate: 3600, // 1hr
         tags: ['activities'],
       },
     })
