@@ -19,11 +19,21 @@ export default async function Page() {
   const allActivityData: Record<string, ActivityData[]> = {
     running: [],
     cycling: [],
+    // Optional: Add walking if you want to track it separately instead of ignoring it
+    // walking: [],
   }
 
   data.forEach((activity: any) => {
-    const type = activity.sport_type === 'Run' ? 'running' : 'cycling'
-    allActivityData[type].push(activity)
+    // Explicitly check the sport type to avoid miscategorizing walks, hikes, etc.
+    if (activity.sport_type === 'Run') {
+      allActivityData.running.push(activity)
+    } else if (activity.sport_type === 'Ride' || activity.sport_type === 'VirtualRide') {
+      // Add any other cycling-related sport types your API returns (e.g., 'Cycling', 'EBikeRide')
+      if (!allActivityData.cycling) allActivityData.cycling = []
+      allActivityData.cycling.push(activity)
+    }
+    // Activities like 'Walk', 'Hike', etc., will now be safely skipped
+    // unless you add a specific array for them above.
   })
 
   return <HomePage allActivityData={allActivityData} />
