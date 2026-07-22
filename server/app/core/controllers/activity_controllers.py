@@ -67,9 +67,9 @@ async def fetch_strava_activities_data(after: int = 0) -> List[Dict[str, Any]]:
 async def add_new_activities_to_db() -> List[ActivityModel]:
     logger.info("Attempting to add new activities to DB")
     try:
-        # Get a date from a month ago
+        # Get a date from a two days ago
         current_date = datetime.now()
-        date_in_past = current_date - timedelta(days=30)
+        date_in_past = current_date - timedelta(hours=48)
 
         # Fetch recent activities from DB using past date
         query = {"start_date_local": {"$gte": date_in_past}}
