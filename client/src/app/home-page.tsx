@@ -2,6 +2,7 @@
 
 import { Suspense, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { IoOpenOutline } from 'react-icons/io5'
 
 import { ActivityStats, Loader, PageHeader } from '@/components'
@@ -22,14 +23,27 @@ const FeaturedProjectCard = ({ project }: { project: Partial<Project> }) => {
   const primaryLang = project.mainLanguage?.[0] ?? 'TypeScript'
   const fileLabel = `${project.id}.${extMap[primaryLang] ?? 'tsx'}`
   const liveURL = project.links?.find((link) => link.type === LinkType.LIVE)?.URL
+  const previewImage = project.screenshotURIs?.[0]
 
   return (
     <div className="group rounded-2xl bg-neutral-800 p-2 transition-colors hover:bg-neutral-700/70">
       <Link href={project.projectPageURI ?? '#'} className="block">
         <div className="overflow-hidden rounded-lg border border-neutral-700 bg-[#0B0D0C]">
-          <div className="flex h-24 items-center justify-center px-4">
-            <span className="truncate font-mono text-[11px] text-orange-500/80">{fileLabel}</span>
-          </div>
+          {previewImage ? (
+            <div className="relative aspect-video w-full">
+              <Image
+                src={previewImage}
+                alt={project.title ?? 'Project preview'}
+                fill
+                sizes="(min-width: 640px) 33vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="flex aspect-video items-center justify-center px-4">
+              <span className="truncate font-mono text-[11px] text-orange-500/80">{fileLabel}</span>
+            </div>
+          )}
         </div>
 
         <div className="mt-3">
@@ -169,12 +183,13 @@ const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
 
   const featuredProjects = projects
     .filter((project) => FEATURED_IDS.includes(project.id))
-    .map(({ id, title, summary, projectPageURI, links }) => ({
+    .map(({ id, title, summary, projectPageURI, links, screenshotURIs }) => ({
       id,
       title,
       summary,
       projectPageURI,
       links,
+      screenshotURIs,
     }))
 
   return (
