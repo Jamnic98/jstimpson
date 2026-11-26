@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     RELOAD: bool = True
     STRAVA_CLIENT_ID: Optional[str] = None
     STRAVA_CLIENT_SECRET: Optional[str] = None
+    STRAVA_LOOKBACK_DAYS: int = 30
 
     model_config = SettingsConfigDict(env_file='.env.local', case_sensitive=True)
 

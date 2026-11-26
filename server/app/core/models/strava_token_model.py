@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Annotated, Optional
-from requests import post, HTTPError
+from requests import post, RequestException
 from pymongo import ReturnDocument
 from pydantic import BaseModel, BeforeValidator, Field, ValidationError
 
@@ -42,11 +42,12 @@ class StravaTokenModel(BaseModel):
                 },
                 timeout=REQUEST_TIMEOUT
             )
+            response_data.raise_for_status()
             strava_token_data = response_data.json()
             return strava_token_data
 
-        except HTTPError as _e:
-            logger.error("Failed to fetch new token data")
+        except RequestException as e:
+            logger.error("Failed to fetch new token data: %s", e)
             return None
 
     def is_token_valid(self) -> bool:
@@ -83,6 +84,9 @@ class StravaTokenModel(BaseModel):
                 upsert=True
             )
 
+            if updated_token is None:
+                raise ValueError("Failed to persist refreshed Strava token")
+
             # Update the local token values
             self.access_token, self.refresh_token, self.expires_at, self.expires_in = (
                 updated_token["access_token"],
@@ -95,3 +99,4 @@ class StravaTokenModel(BaseModel):
 
         except (ValueError, ValidationError) as e:
             logger.error("Failed to refresh Strava token: %s", e)
+            raise RuntimeError("Failed to refresh Strava token") from e

@@ -8,6 +8,7 @@ from app.core.models.activity_model import ActivityCollection, ActivityModel
 from app.core.models.strava_token_model import StravaTokenModel
 from app.factories.database import strava_tokens_collection, activities_collection
 from app.utils.constants import DEFAULT_STRAVA_TOKEN_ID, STRAVA_ACTIVITIES_API_ENDPOINT, REQUEST_TIMEOUT
+from app.utils.config import settings
 from app.utils import safe_str
 from app.utils.logger import logger
 
@@ -67,14 +68,15 @@ async def fetch_strava_activities_data(after: int = 0) -> List[Dict[str, Any]]:
 async def add_new_activities_to_db() -> List[ActivityModel]:
     logger.info("Attempting to add new activities to DB")
     try:
-        # Get a date from a two days ago
+        # Look back over a configurable window so previously missed activities are backfilled
         current_date = datetime.now()
-        date_in_past = current_date - timedelta(hours=48)
+        date_in_past = current_date - timedelta(days=settings.STRAVA_LOOKBACK_DAYS)
 
         # Fetch recent activities from DB using past date
         query = {"start_date_local": {"$gte": date_in_past}}
         db_activity_data = await activities_collection.find(query).to_list(length=None)
         db_activity_dates = {db_activity["start_date_local"] for db_activity in db_activity_data}
+        db_strava_ids = {safe_str(db_activity.get("strava_id")) for db_activity in db_activity_data}
 
         # Fetch recent activities from Strava's API
         strava_activities_data = await fetch_strava_activities_data(int(date_in_past.timestamp()))
@@ -86,7 +88,8 @@ async def add_new_activities_to_db() -> List[ActivityModel]:
             if not date_str:
                 continue
             parsed_date = datetime.fromisoformat(date_str.replace("Z", "+00:00")).replace(tzinfo=None)
-            if parsed_date not in db_activity_dates:
+            strava_id = safe_str(activity.get("id"))
+            if strava_id not in db_strava_ids and parsed_date not in db_activity_dates:
                 filtered_strava_activities.append(activity)
 
         if not filtered_strava_activities:
