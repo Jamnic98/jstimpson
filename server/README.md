@@ -39,7 +39,7 @@ sam build           # compiles the Go binaries itself via the Makefile (BuildMet
 sam deploy --guided
 ```
 
-`sam build` invokes `make build-ApiFunction` / `make build-ActivitiesUpdaterFunction`
+`sam build` invokes `make build-FastApiFunction` / `make build-DbActivitiesUpdaterFunction`
 (see `Makefile`), producing a static `bootstrap` binary per function. No pre-build
 step is needed. Requires the SAM parameters `StravaClientId`, `StravaClientSecret`,
 `DbName`, `DbUri`. `make build` still works for producing local binaries under `bin/`.
