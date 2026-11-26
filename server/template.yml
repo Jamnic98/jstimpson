@@ -28,13 +28,15 @@ Globals:
 
 Resources:
   # ----------------------
-  # API entrypoint (static Go binary, run `make build` first)
+  # API entrypoint (SAM makefile builder compiles the Go binary via `make build-ApiFunction`)
   # ----------------------
   ApiFunction:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
       FunctionName: jstimpson-server-api
-      CodeUri: bin/api
+      CodeUri: .
       Handler: bootstrap
       Policies:
         - Version: "2012-10-17"
@@ -68,9 +70,11 @@ Resources:
   # ----------------------
   ActivitiesUpdaterFunction:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
       FunctionName: jstimpson-server-db-activities-updater
-      CodeUri: bin/activities-updater
+      CodeUri: .
       Handler: bootstrap
       Policies:
         - Version: "2012-10-17"
