@@ -1,13 +1,22 @@
-FROM python:3.12-slim
+# Build Stage
+FROM golang:1.26-alpine AS builder
 
 WORKDIR /app
 
-COPY requirements.txt .
-
-RUN pip install -r requirements.txt
+COPY go.mod go.sum ./
+RUN go mod download
 
 COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /out/api ./cmd/api
+
+# Production Stage
+FROM alpine:3.21
+
+RUN adduser -D appuser
+USER appuser
+
+COPY --from=builder /out/api /usr/local/bin/api
 
 EXPOSE 8080
 
-CMD ["python3", "app/main.py"]
+CMD ["api"]

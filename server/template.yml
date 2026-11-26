@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: jstimpson-server SAM stack (FastAPI + DB Updaters)
+Description: jstimpson-server SAM stack (Go on Lambda + MongoDB + Strava updater)
 
 Parameters:
   StravaClientId:
@@ -14,9 +14,11 @@ Parameters:
 
 Globals:
   Function:
-    Timeout: 10
-    MemorySize: 512
-    Runtime: python3.11
+    Timeout: 30
+    MemorySize: 1024
+    Runtime: provided.al2023
+    Architectures:
+      - arm64
     Environment:
       Variables:
         STRAVA_CLIENT_ID: !Ref StravaClientId
@@ -26,13 +28,14 @@ Globals:
 
 Resources:
   # ----------------------
-  # FastAPI entrypoint
+  # API entrypoint (static Go binary, run `make build` first)
   # ----------------------
-  FastApiFunction:
+  ApiFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: app.main.handler
       FunctionName: jstimpson-server-api
+      CodeUri: bin/api
+      Handler: bootstrap
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -61,13 +64,14 @@ Resources:
           - GET
 
   # ----------------------
-  # Separate Lambda: Activities updater
+  # Lambda: Strava activities updater (daily backfill into MongoDB)
   # ----------------------
-  DbActivitiesUpdaterFunction:
+  ActivitiesUpdaterFunction:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: jstimpson-server-db-activities-updater
-      Handler: app.handlers.activities_updater.handler
+      CodeUri: bin/activities-updater
+      Handler: bootstrap
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -82,14 +86,14 @@ Resources:
         Schedule:
           Type: Schedule
           Properties:
-            # Also daily at midnight (or set different time)
+            # Update once a day at midnight UTC
             Schedule: "cron(0 0 * * ? *)"
 
 Outputs:
   ApiUrl:
-    Description: "FastAPI API Gateway URL"
+    Description: "API Gateway URL"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
 
-  HandlerFunction:
-    Description: "Mangum Handler Function ARN"
-    Value: !GetAtt FastApiFunction.Arn
+  ApiFunctionArn:
+    Description: "API Lambda function ARN"
+    Value: !GetAtt ApiFunction.Arn

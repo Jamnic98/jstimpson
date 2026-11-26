@@ -26,3 +26,6 @@ var/
 .idea
 .aws-sam/
 samconfig.toml
+
+# Go build output
+bin/

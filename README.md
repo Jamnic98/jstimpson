@@ -10,7 +10,7 @@ Key improvements include:
 
 - Migrating to **Next.js** for server-side rendering and static site generation
 - Switching from CSS to **TailwindCSS** for clean, maintainable styling
-- Rewriting backend logic in **Python with FastAPI**, enabling easy feature additions and data processing with Python libraries
+- Rewriting backend logic in **Go**, running on AWS Lambda with fast cold starts and a small static binary
 - Consolidating the client and server into a single, unified repository
 
 The site is continuously updated, with new features and design improvements added regularly.
@@ -26,7 +26,7 @@ The site is continuously updated, with new features and design improvements adde
 ## Architecture
 
 - **Frontend**: Next.js with TypeScript and TailwindCSS
-- **Backend**: Python with FastAPI, serving dynamic project and activity data
+- **Backend**: Go on AWS Lambda, serving dynamic project and activity data
 - **Database**: MongoDB Atlas for storing project info and activity data
 - **Deployment**: Hosted on **Vercel** with serverless functions and optional AWS Lambda integration
 
@@ -35,14 +35,13 @@ The backend handles API requests, data preprocessing, and refresh tokens for ext
 ## Tech Stack
 
 - TypeScript
-- Python
+- Go
 - Next.js
 - TailwindCSS
-- FastAPI
 - MongoDB Atlas
 - Vercel / AWS Lambda
 - Three.js / D3.js
-- Jest, React Testing Library, Pytest
+- Jest, React Testing Library, Go testing
 - Strava API integration
 
 ## Outcome
