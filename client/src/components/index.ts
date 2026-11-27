@@ -1,4 +1,5 @@
 export * from './Activity'
+export * from './HabitTracker'
 export * from './Card'
 export * from './Error'
 export * from './Footer'

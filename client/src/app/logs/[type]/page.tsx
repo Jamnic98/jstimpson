@@ -15,6 +15,12 @@ const routeToDisplayMap: Record<string, string> = {
   cycling: 'Cycling',
 }
 
+const logTabs = [
+  { label: 'running', url: '/logs/running' },
+  { label: 'cycling', url: '/logs/cycling' },
+  { label: 'habit tracker', url: '/logs/habit-tracker' },
+]
+
 export const metadata: Metadata = {
   title: 'Activity Logs',
 }
@@ -40,6 +46,21 @@ export default async function Page(props: LogsProps) {
   return (
     <>
       <PageHeader title={content.title} description={content.description} />
+      <nav className="my-6 flex flex-wrap gap-2 font-mono text-[11px] uppercase tracking-widest">
+        {logTabs.map((tab) => (
+          <Link
+            key={tab.url}
+            href={tab.url}
+            className={`rounded-md border px-3 py-1.5 transition-colors ${
+              tab.url === `/logs/${typeParam}`
+                ? 'border-orange-600/60 bg-orange-600/20 text-orange-500'
+                : 'border-neutral-700 text-neutral-500 hover:text-neutral-300'
+            }`}
+          >
+            {tab.label}
+          </Link>
+        ))}
+      </nav>
       <article className="mb-16 text-white">
         <section className="my-12">
           <ActivitiesDataSection activitiesPromise={activitiesPromise} type={typeParam} />

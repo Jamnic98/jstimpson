@@ -6,7 +6,8 @@ backfills Strava activities into MongoDB Atlas once a day.
 
 ## Layout
 
-- `cmd/api` — HTTP API (`GET /health`, `GET /activities?after=&type=`, `GET /runs?after=`).
+- `cmd/api` — HTTP API (`GET /health`, `GET /activities?after=&type=`, `GET /runs?after=`,
+  `GET /stats/activities?type=`, `GET /stats/goals?month=`, `GET|POST /goals`, `DELETE /goals/{id}`).
   Outside Lambda it serves plain HTTP on `PORT` (default 8080) for local dev.
 - `cmd/activities-updater` — scheduled Lambda that pulls activities from the
   Strava API (lookback window `STRAVA_LOOKBACK_DAYS`, default 30 days) and
