@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   title: 'Habit Tracker',
 }
 
+// The page fetches from the backend at request time; never prerender it at
+// build time (preview builds have no reachable API / credentials).
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   const month = new Date().toISOString().slice(0, 7)
 
