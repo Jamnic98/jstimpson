@@ -1,23 +1,14 @@
 'use client'
 
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { IoOpenOutline } from 'react-icons/io5'
 
-import { ActivityStats, Loader, PageHeader } from '@/components'
-import { type Project, type ActivityData, LinkType } from '@/types'
+import { Loader, PageHeader } from '@/components'
+import { type Project, LinkType } from '@/types'
 import { extMap } from '@/utils/constants'
 import projects from '@/data/projects'
-
-const typeDisplayMap: Record<string, string> = {
-  running: 'Running',
-  cycling: 'Cycling',
-}
-
-interface HomePageProps {
-  allActivityData: Record<string, ActivityData[]>
-}
 
 const FeaturedProjectCard = ({ project }: { project: Partial<Project> }) => {
   const primaryLang = project.mainLanguage?.[0] ?? 'TypeScript'
@@ -99,30 +90,11 @@ const FeaturedProjects = ({ projectData }: { projectData: Partial<Project>[] }) 
   </section>
 )
 
-const activityCountLabel: Record<string, string> = {
-  running: 'runs logged',
-  cycling: 'rides logged',
-}
-
-const HeroStats = ({
-  projectCount,
-  activityCount,
-  activityType,
-}: {
-  projectCount: number
-  activityCount: number
-  activityType: string
-}) => (
+const HeroStats = ({ projectCount }: { projectCount: number }) => (
   <div className="flex gap-8 font-mono text-xs font-light">
     <div>
       <div className="uppercase tracking-widest text-neutral-400">projects</div>
       <div className="mt-1 text-sm text-white">{projectCount}</div>
-    </div>
-    <div>
-      <div className="uppercase tracking-widest text-neutral-400">
-        {activityCountLabel[activityType] ?? 'activities logged'}
-      </div>
-      <div className="mt-1 text-sm text-white">{activityCount}</div>
     </div>
     <div>
       <div className="uppercase tracking-widest text-neutral-400">status</div>
@@ -131,55 +103,9 @@ const HeroStats = ({
   </div>
 )
 
-// Restyled to match the pagination/pill language used elsewhere — mono, uppercase,
-// active state as a filled orange chip inside a bordered dark track.
-const ActivityTypeSelector = ({
-  selected,
-  types,
-  onSelect,
-}: {
-  selected: string
-  types: string[]
-  onSelect: (type: string) => void
-}) => (
-  <div className="flex h-fit w-fit rounded-lg border border-neutral-700 bg-neutral-900 p-0.5 font-mono text-[11px] uppercase tracking-widest">
-    {types.map((type) => (
-      <button
-        key={type}
-        type="button"
-        onClick={() => onSelect(type)}
-        className={`cursor-pointer rounded-md px-3 py-1.5 transition-colors ${
-          selected === type
-            ? 'bg-orange-600/20 text-orange-500'
-            : 'text-neutral-500 hover:text-neutral-300'
-        }`}
-      >
-        {typeDisplayMap[type] ?? type}
-      </button>
-    ))}
-  </div>
-)
-
-const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
+const HomePage: React.FC = () => {
   const FEATURED_IDS = ['alt-world', 'scrabble-scorekeeper', 'typation']
   const currentYear = new Date().getFullYear()
-
-  const activityTypes = Object.keys(allActivityData)
-  const [selectedType, setSelectedType] = useState('running')
-
-  // All-time count for the hero — unaffected by the monthly filter below.
-  const activityCount = allActivityData[selectedType]?.length ?? 0
-
-  // Monthly view for the activity stats panel, filtered from the full fetch.
-  const monthlyActivities = useMemo(() => {
-    const now = new Date()
-    const startOfMonthUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)
-
-    return (allActivityData[selectedType] ?? []).filter((activity) => {
-      const activityTime = new Date(activity.start_date_local).getTime()
-      return activityTime >= startOfMonthUTC
-    })
-  }, [allActivityData, selectedType])
 
   const featuredProjects = projects
     .filter((project) => FEATURED_IDS.includes(project.id))
@@ -198,23 +124,13 @@ const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
 
       <PageHeader
         title="Full-stack Engineer & aspiring 3D artist"
-        description="Building things with Next.js, Python, and Blender."
+        description="Building things with Next.js, Go, and Blender."
       />
 
       <hr className="my-6 w-full border-none bg-gray-600" style={{ height: '0.1px' }} />
 
       <div className="flex justify-between flex-wrap gap-8">
-        <HeroStats
-          projectCount={projects.length}
-          activityCount={activityCount}
-          activityType={selectedType}
-        />
-
-        <ActivityTypeSelector
-          selected={selectedType}
-          types={activityTypes}
-          onSelect={setSelectedType}
-        />
+        <HeroStats projectCount={projects.length} />
       </div>
 
       <div className="my-12">
@@ -227,25 +143,6 @@ const HomePage: React.FC<HomePageProps> = ({ allActivityData }) => {
         >
           <FeaturedProjects projectData={featuredProjects} />
         </Suspense>
-      </div>
-
-      <div className="flex items-end justify-between">
-        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-neutral-400">
-          {new Date().toLocaleString('default', { month: 'long' })} {typeDisplayMap[selectedType]}
-        </p>
-      </div>
-
-      <div className="rounded-2xl border border-gray-600 bg-neutral-800 p-4">
-        <ActivityStats activityData={monthlyActivities} unit="metric" />
-      </div>
-
-      <div className="mt-8 flex justify-center">
-        <Link
-          href={`/logs/${selectedType}`}
-          className="font-mono text-[11px] uppercase tracking-widest text-neutral-400 transition-colors hover:text-orange-600"
-        >
-          - all activities -
-        </Link>
       </div>
     </>
   )

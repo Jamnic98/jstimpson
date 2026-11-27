@@ -22,8 +22,22 @@ go run ./cmd/api                 # serves :8080 (docker-compose wires this to ./
 go run ./cmd/activities-updater  # needs env vars, runs one backfill then exits... (in Lambda it is scheduled)
 ```
 
-Environment variables: `DB_URI`, `DB_NAME`, `PORT`, `STRAVA_CLIENT_ID`,
+Environment variables: `DB_URI`, `DB_NAME`, `PORT`, `API_KEY`, `STRAVA_CLIENT_ID`,
 `STRAVA_CLIENT_SECRET`, `STRAVA_LOOKBACK_DAYS`, `REQUEST_TIMEOUT_SECONDS`.
+
+### API authentication
+
+All endpoints except `GET /health` (and CORS preflights) require an
+`x-api-key` header matching `API_KEY`. The website sends it server-side
+(`SERVER_API_KEY` on Vercel), so it is never exposed to the browser. An empty
+`API_KEY` disables auth — only for local dev; Lambda always has it set.
+
+### Gated logs pages (client)
+
+The Next.js client gates `/logs/*` behind an access token: `src/middleware.ts`
+checks the `logs_session` cookie against `LOGS_ACCESS_TOKEN` (Vercel env var)
+and redirects to `/logs-gate`, which sets the cookie via `POST /api/logs-gate`.
+Public pages must not link to `/logs/*`.
 
 ## Tests
 
@@ -35,11 +49,13 @@ make vet
 ## Deploy (SAM)
 
 ```sh
-make build          # cross-compiles bin/api/bootstrap and bin/activities-updater/bootstrap
-sam build
+sam build           # compiles the Go binaries itself via the Makefile (BuildMethod: makefile)
 sam deploy --guided
 ```
 
-Requires the SAM parameters `StravaClientId`, `StravaClientSecret`, `DbName`, `DbUri`.
+`sam build` invokes `make build-FastApiFunction` / `make build-DbActivitiesUpdaterFunction`
+(see `Makefile`), producing a static `bootstrap` binary per function. No pre-build
+step is needed. Requires the SAM parameters `StravaClientId`, `StravaClientSecret`,
+`DbName`, `DbUri`. `make build` still works for producing local binaries under `bin/`.
 
 ### Go version: 1.26+

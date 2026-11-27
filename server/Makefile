@@ -1,18 +1,26 @@
-BIN_DIR := bin
 LDFLAGS := -s -w
+GO_BUILD_ENV := GOOS=linux GOARCH=arm64 CGO_ENABLED=0
+ARTIFACTS_DIR ?= bin
 
-.PHONY: build build-local test vet clean
+.PHONY: build build-local test vet clean build-FastApiFunction build-DbActivitiesUpdaterFunction
 
-# Cross-compile static binaries for Lambda (provided.al2023, arm64).
-# Run before `sam build`/`sam deploy`; each function package needs a
-# `bootstrap` executable in its CodeUri directory.
+# SAM CustomMakeBuilder targets: `sam build` runs `make build-<FunctionLogicalId>`
+# with ARTIFACTS_DIR pointing at the per-function output directory. The target names
+# must match the function logical IDs in template.yml.
+build-FastApiFunction:
+	$(GO_BUILD_ENV) go build -ldflags="$(LDFLAGS)" -o $(ARTIFACTS_DIR)/bootstrap ./cmd/api
+
+build-DbActivitiesUpdaterFunction:
+	$(GO_BUILD_ENV) go build -ldflags="$(LDFLAGS)" -o $(ARTIFACTS_DIR)/bootstrap ./cmd/activities-updater
+
+# Local convenience: prebuilt static binaries under bin/ (manual packaging, local runs)
 build:
-	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="$(LDFLAGS)" -o $(BIN_DIR)/api/bootstrap ./cmd/api
-	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="$(LDFLAGS)" -o $(BIN_DIR)/activities-updater/bootstrap ./cmd/activities-updater
+	$(GO_BUILD_ENV) go build -ldflags="$(LDFLAGS)" -o bin/api/bootstrap ./cmd/api
+	$(GO_BUILD_ENV) go build -ldflags="$(LDFLAGS)" -o bin/activities-updater/bootstrap ./cmd/activities-updater
 
 build-local:
-	CGO_ENABLED=0 go build -o $(BIN_DIR)/api-local ./cmd/api
-	CGO_ENABLED=0 go build -o $(BIN_DIR)/updater-local ./cmd/activities-updater
+	CGO_ENABLED=0 go build -o bin/api-local ./cmd/api
+	CGO_ENABLED=0 go build -o bin/updater-local ./cmd/activities-updater
 
 test:
 	go test ./...
@@ -21,4 +29,4 @@ vet:
 	go vet ./...
 
 clean:
-	rm -rf $(BIN_DIR)
+	rm -rf bin .aws-sam

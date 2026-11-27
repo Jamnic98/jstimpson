@@ -1,4 +1,5 @@
 import { type Metadata } from 'next'
+import Link from 'next/link'
 
 import { PageHeader, ActivityDataView } from '@/components'
 import { fetchActivities } from '@/utils'
@@ -43,6 +44,14 @@ export default async function Page(props: LogsProps) {
         <section className="my-12">
           <ActivitiesDataSection activitiesPromise={activitiesPromise} type={typeParam} />
         </section>
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/api/logs-gate/logout"
+            className="font-mono text-[11px] uppercase tracking-widest text-neutral-500 transition-colors hover:text-orange-600"
+          >
+            - log out -
+          </Link>
+        </div>
       </article>
     </>
   )
