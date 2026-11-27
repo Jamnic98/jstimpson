@@ -34,13 +34,18 @@ Globals:
 
 Resources:
   # ----------------------
-  # API entrypoint (static Go binary, run `make build` first)
+  # API entrypoint (SAM makefile builder compiles the Go binary via `make build-FastApiFunction`)
+  # NOTE: keep the original logical ID (FastApiFunction) so CloudFormation updates the
+  # existing function in place; renaming it would trip NAME_CONFLICT_VALIDATION because
+  # the FunctionName jstimpson-server-api already exists under the old logical ID.
   # ----------------------
-  ApiFunction:
+  FastApiFunction:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
       FunctionName: jstimpson-server-api
-      CodeUri: bin/api
+      CodeUri: .
       Handler: bootstrap
       Policies:
         - Version: "2012-10-17"
@@ -72,11 +77,13 @@ Resources:
   # ----------------------
   # Lambda: Strava activities updater (daily backfill into MongoDB)
   # ----------------------
-  ActivitiesUpdaterFunction:
+  DbActivitiesUpdaterFunction:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
       FunctionName: jstimpson-server-db-activities-updater
-      CodeUri: bin/activities-updater
+      CodeUri: .
       Handler: bootstrap
       Policies:
         - Version: "2012-10-17"
@@ -102,4 +109,4 @@ Outputs:
 
   ApiFunctionArn:
     Description: "API Lambda function ARN"
-    Value: !GetAtt ApiFunction.Arn
+    Value: !GetAtt FastApiFunction.Arn

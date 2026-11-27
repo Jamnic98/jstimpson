@@ -49,11 +49,13 @@ make vet
 ## Deploy (SAM)
 
 ```sh
-make build          # cross-compiles bin/api/bootstrap and bin/activities-updater/bootstrap
-sam build
+sam build           # compiles the Go binaries itself via the Makefile (BuildMethod: makefile)
 sam deploy --guided
 ```
 
-Requires the SAM parameters `StravaClientId`, `StravaClientSecret`, `DbName`, `DbUri`.
+`sam build` invokes `make build-FastApiFunction` / `make build-DbActivitiesUpdaterFunction`
+(see `Makefile`), producing a static `bootstrap` binary per function. No pre-build
+step is needed. Requires the SAM parameters `StravaClientId`, `StravaClientSecret`,
+`DbName`, `DbUri`. `make build` still works for producing local binaries under `bin/`.
 
 ### Go version: 1.26+
