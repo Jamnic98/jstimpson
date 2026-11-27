@@ -44,9 +44,18 @@ func (a *API) Handler() http.Handler {
 	mux.HandleFunc("GET /runs", a.runs)
 	mux.HandleFunc("GET /stats/activities", a.statsActivities)
 	mux.HandleFunc("GET /stats/goals", a.goalProgress)
+	mux.HandleFunc("GET /stats/habits", a.statsHabits)
 	mux.HandleFunc("GET /goals", a.listGoals)
 	mux.HandleFunc("POST /goals", a.createGoal)
 	mux.HandleFunc("DELETE /goals/{id}", a.deleteGoal)
+	mux.HandleFunc("GET /habits", a.listHabits)
+	mux.HandleFunc("POST /habits", a.createHabit)
+	mux.HandleFunc("PATCH /habits/{id}", a.updateHabit)
+	mux.HandleFunc("DELETE /habits/{id}", a.deleteHabit)
+	mux.HandleFunc("GET /checkins", a.listCheckins)
+	mux.HandleFunc("POST /checkins", a.upsertCheckin)
+	mux.HandleFunc("PATCH /checkins/{id}", a.updateCheckin)
+	mux.HandleFunc("DELETE /checkins/{id}", a.deleteCheckin)
 	return cors(authMiddleware(a.cfg.APIKey, mux))
 }
 

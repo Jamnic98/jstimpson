@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -19,6 +21,17 @@ func main() {
 		slog.Error("failed to create MongoDB client", "error", err)
 		os.Exit(1)
 	}
+
+	// unique (habit_id, date) index on checkins; background so a missing
+	// local Mongo never blocks startup
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := d.EnsureIndexes(ctx); err != nil {
+			slog.Warn("failed to ensure indexes", "error", err)
+		}
+	}()
+
 	a := api.New(d, cfg)
 
 	// Outside Lambda (local dev / docker-compose) serve plain HTTP on PORT.

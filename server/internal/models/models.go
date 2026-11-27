@@ -68,6 +68,74 @@ var ValidGoalMetrics = map[string]bool{
 	"time_hours":  true,
 }
 
+// Habit is a trackable routine. VerificationSource is where completion
+// evidence comes from: "manual" (self-reported), or an external source
+// ("strava", "github", "notion", "calendar") verified by a verifier run.
+type Habit struct {
+	ID                 primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Name               string             `bson:"name" json:"name"`
+	Category           string             `bson:"category,omitempty" json:"category,omitempty"`
+	Unit               string             `bson:"unit,omitempty" json:"unit,omitempty"`
+	TargetPerWeek      int                `bson:"target_per_week" json:"target_per_week"`
+	Schedule           []string           `bson:"schedule,omitempty" json:"schedule,omitempty"` // lowercase weekdays: mon..sun
+	VerificationSource string             `bson:"verification_source" json:"verification_source"`
+	SportType          string             `bson:"sport_type,omitempty" json:"sport_type,omitempty"`
+	MinDistanceKm      *float64           `bson:"min_distance_km,omitempty" json:"min_distance_km,omitempty"`
+	Active             bool               `bson:"active" json:"active"`
+	CreatedAt          time.Time          `bson:"created_at" json:"created_at"`
+}
+
+type CheckinStatus string
+
+const (
+	CheckinDone           CheckinStatus = "done"             // verified by an external source
+	CheckinDoneUnverified CheckinStatus = "done_unverified"  // self-reported only
+	CheckinMissed         CheckinStatus = "missed"           // day closed, no evidence found
+	CheckinSkipped        CheckinStatus = "skipped"          // not scheduled / snoozed
+)
+
+var ValidCheckinStatuses = map[string]bool{
+	string(CheckinDone):           true,
+	string(CheckinDoneUnverified): true,
+	string(CheckinMissed):         true,
+	string(CheckinSkipped):        true,
+}
+
+var ValidVerificationSources = map[string]bool{
+	"manual":   true,
+	"strava":   true,
+	"github":   true,
+	"notion":   true,
+	"calendar": true,
+}
+
+var ValidWeekdays = map[string]bool{
+	"mon": true, "tue": true, "wed": true, "thu": true, "fri": true, "sat": true, "sun": true,
+}
+
+// Evidence points at the external record that proves a check-in
+// (Strava activity id, GitHub commit SHAs, Notion page url, ...).
+type Evidence struct {
+	Source string `bson:"source" json:"source"`
+	ID     string `bson:"id,omitempty" json:"id,omitempty"`
+	URL    string `bson:"url,omitempty" json:"url,omitempty"`
+	Detail string `bson:"detail,omitempty" json:"detail,omitempty"`
+}
+
+// Checkin is one habit-day. Unique per (habit_id, date).
+type Checkin struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	HabitID   primitive.ObjectID `bson:"habit_id" json:"habit_id"`
+	Date      string             `bson:"date" json:"date"` // YYYY-MM-DD
+	Status    CheckinStatus      `bson:"status" json:"status"`
+	Verified  bool               `bson:"verified" json:"verified"`
+	Source    string             `bson:"source" json:"source"` // manual | strava | github | notion | telegram
+	Evidence  []Evidence         `bson:"evidence,omitempty" json:"evidence,omitempty"`
+	Note      string             `bson:"note,omitempty" json:"note,omitempty"`
+	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
+}
+
 var ValidSportTypes = map[string]bool{
 	"AlpineSki": true, "BackcountrySki": true, "Badminton": true, "Canoeing": true,
 	"Crossfit": true, "EBikeRide": true, "Elliptical": true, "EMountainBikeRide": true,
