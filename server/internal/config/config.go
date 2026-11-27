@@ -10,6 +10,7 @@ type Config struct {
 	DBURI              string
 	DBName             string
 	Port               string
+	APIKey             string
 	StravaClientID     string
 	StravaClientSecret string
 	StravaLookbackDays int
@@ -21,6 +22,7 @@ func Load() Config {
 		DBURI:              getEnv("DB_URI", "mongodb://localhost:27017"),
 		DBName:             getEnv("DB_NAME", "dev_database"),
 		Port:               getEnv("PORT", "8080"),
+		APIKey:             os.Getenv("API_KEY"),
 		StravaClientID:     os.Getenv("STRAVA_CLIENT_ID"),
 		StravaClientSecret: os.Getenv("STRAVA_CLIENT_SECRET"),
 		StravaLookbackDays: getEnvInt("STRAVA_LOOKBACK_DAYS", 30),

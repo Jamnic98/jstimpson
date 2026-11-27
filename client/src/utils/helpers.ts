@@ -20,6 +20,8 @@ export const fetchActivities = async (type?: string, timestamp?: number) => {
         revalidate: 3600, // 1hr
         tags: ['activities'],
       },
+      // server-side only: the backend requires this key (never shipped to the browser)
+      headers: { 'x-api-key': process.env.SERVER_API_KEY ?? '' },
     })
 
     if (!response.ok) {

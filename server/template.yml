@@ -7,10 +7,15 @@ Parameters:
     Type: String
   StravaClientSecret:
     Type: String
+    NoEcho: true
   DbName:
     Type: String
   DbUri:
     Type: String
+    NoEcho: true
+  ApiKey:
+    Type: String
+    NoEcho: true
 
 Globals:
   Function:
@@ -25,6 +30,7 @@ Globals:
         STRAVA_CLIENT_SECRET: !Ref StravaClientSecret
         DB_NAME: !Ref DbName
         DB_URI: !Ref DbUri
+        API_KEY: !Ref ApiKey
 
 Resources:
   # ----------------------

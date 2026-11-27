@@ -3,17 +3,7 @@ import type { NavLinkData } from '@/types'
 export const navLinkDataArr: NavLinkData[] = [
   { label: 'coding', url: '/coding', children: [] },
   { label: '3D', url: '/3d', children: [] },
-  {
-    label: 'logs',
-    url: '/logs/running',
-    children: [
-      { label: 'running', url: '/logs/running', children: [] },
-      { label: 'cycling', url: '/logs/cycling', children: [] },
-      // { label: 'weight lifting', url: '/logs/weight-lifting', children: [] },
-      // { label: 'habit tracker', url: '/logs/habit-tracker', children: [] },
-      // { label: 'reading', url: '/logs/reading', children: [] }
-    ],
-  },
+  // /logs/* is private (gated by middleware) — no public nav references.
   { label: 'about ', url: '/about', children: [] },
 ]
 

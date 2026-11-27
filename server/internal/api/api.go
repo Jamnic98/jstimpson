@@ -39,7 +39,24 @@ func (a *API) Handler() http.Handler {
 	mux.HandleFunc("GET /health", a.health)
 	mux.HandleFunc("GET /activities", a.activities)
 	mux.HandleFunc("GET /runs", a.runs)
-	return cors(mux)
+	return cors(authMiddleware(a.cfg.APIKey, mux))
+}
+
+// authMiddleware requires the x-api-key header on every request except CORS
+// preflights and the health check. An empty key disables auth (local dev only —
+// Lambda always has API_KEY set via the SAM template).
+func authMiddleware(apiKey string, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if apiKey == "" || r.Method == http.MethodOptions || (r.Method == http.MethodGet && r.URL.Path == "/health") {
+			next.ServeHTTP(w, r)
+			return
+		}
+		if r.Header.Get("X-Api-Key") != apiKey {
+			writeError(w, http.StatusUnauthorized, "Unauthorized: missing or invalid API key")
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func cors(next http.Handler) http.Handler {
