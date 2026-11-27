@@ -51,6 +51,23 @@ type StravaToken struct {
 
 const DefaultStravaTokenID = "0"
 
+// Goal is a monthly target for an activity type (e.g. "run 100 km in 2026-11").
+type Goal struct {
+	ID     primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Name   string             `bson:"name" json:"name"`
+	Type   string             `bson:"type" json:"type"`     // sport type, e.g. "Run"; "any" matches all
+	Metric string             `bson:"metric" json:"metric"` // "distance_km" | "count" | "time_hours"
+	Target float64            `bson:"target" json:"target"`
+	Month  string             `bson:"month" json:"month"` // "YYYY-MM"
+	Active bool               `bson:"active" json:"active"`
+}
+
+var ValidGoalMetrics = map[string]bool{
+	"distance_km": true,
+	"count":       true,
+	"time_hours":  true,
+}
+
 var ValidSportTypes = map[string]bool{
 	"AlpineSki": true, "BackcountrySki": true, "Badminton": true, "Canoeing": true,
 	"Crossfit": true, "EBikeRide": true, "Elliptical": true, "EMountainBikeRide": true,

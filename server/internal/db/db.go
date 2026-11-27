@@ -14,6 +14,7 @@ import (
 const (
 	ActivitiesCollection   = "activities"
 	StravaTokensCollection = "strava_tokens"
+	GoalsCollection        = "goals"
 )
 
 type DB struct {
@@ -44,6 +45,10 @@ func (d *DB) Activities() *mongo.Collection {
 
 func (d *DB) StravaTokens() *mongo.Collection {
 	return d.client.Database(d.cfg.DBName).Collection(StravaTokensCollection)
+}
+
+func (d *DB) Goals() *mongo.Collection {
+	return d.client.Database(d.cfg.DBName).Collection(GoalsCollection)
 }
 
 func (d *DB) Close(ctx context.Context) error {

@@ -7,16 +7,19 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"regexp"
 	"strconv"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/Jamnic98/jstimpson/server/internal/config"
 	"github.com/Jamnic98/jstimpson/server/internal/db"
 	"github.com/Jamnic98/jstimpson/server/internal/models"
+	"github.com/Jamnic98/jstimpson/server/internal/stats"
 )
 
 var allowedOrigins = map[string]bool{
@@ -39,6 +42,11 @@ func (a *API) Handler() http.Handler {
 	mux.HandleFunc("GET /health", a.health)
 	mux.HandleFunc("GET /activities", a.activities)
 	mux.HandleFunc("GET /runs", a.runs)
+	mux.HandleFunc("GET /stats/activities", a.statsActivities)
+	mux.HandleFunc("GET /stats/goals", a.goalProgress)
+	mux.HandleFunc("GET /goals", a.listGoals)
+	mux.HandleFunc("POST /goals", a.createGoal)
+	mux.HandleFunc("DELETE /goals/{id}", a.deleteGoal)
 	return cors(authMiddleware(a.cfg.APIKey, mux))
 }
 
@@ -185,6 +193,156 @@ func (a *API) runs(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 	writeJSON(w, http.StatusOK, models.RunCollection{Runs: runs})
+}
+
+func (a *API) allActivities(ctx context.Context) ([]models.Activity, error) {
+	opts := options.Find().SetSort(bson.D{{Key: "start_date_local", Value: 1}})
+	cur, err := a.db.Activities().Find(ctx, bson.M{}, opts)
+	if err != nil {
+		return nil, err
+	}
+	var acts []models.Activity
+	if err := cur.All(ctx, &acts); err != nil {
+		return nil, err
+	}
+	return acts, nil
+}
+
+func (a *API) statsActivities(w http.ResponseWriter, r *http.Request) {
+	sportType := r.URL.Query().Get("type")
+	if sportType == "" {
+		sportType = "Run"
+	}
+	if sportType != "any" && !models.ValidSportTypes[sportType] {
+		writeError(w, http.StatusUnprocessableEntity, "Invalid sport type: "+sportType)
+		return
+	}
+
+	acts, err := a.allActivities(r.Context())
+	if err != nil {
+		slog.Error("database error", "error", err)
+		writeError(w, http.StatusServiceUnavailable, "Internal Server Error: Database operation failed")
+		return
+	}
+	writeJSON(w, http.StatusOK, stats.Summarize(acts, sportType, time.Now()))
+}
+
+var monthPattern = regexp.MustCompile(`^\d{4}-\d{2}$`)
+
+func (a *API) listGoals(w http.ResponseWriter, r *http.Request) {
+	opts := options.Find().SetSort(bson.D{{Key: "month", Value: -1}})
+	cur, err := a.db.Goals().Find(r.Context(), bson.M{"active": true}, opts)
+	if err != nil {
+		slog.Error("database error", "error", err)
+		writeError(w, http.StatusServiceUnavailable, "Internal Server Error: Database operation failed")
+		return
+	}
+	var goals []models.Goal
+	if err := cur.All(r.Context(), &goals); err != nil {
+		slog.Error("failed to decode goals", "error", err)
+		writeError(w, http.StatusServiceUnavailable, "Internal Server Error: Database operation failed")
+		return
+	}
+	if goals == nil {
+		goals = []models.Goal{}
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"goals": goals})
+}
+
+func (a *API) createGoal(w http.ResponseWriter, r *http.Request) {
+	var goal models.Goal
+	if err := json.NewDecoder(r.Body).Decode(&goal); err != nil {
+		writeError(w, http.StatusBadRequest, "Invalid JSON body")
+		return
+	}
+	goal.ID = primitive.NilObjectID
+	if goal.Name == "" {
+		writeError(w, http.StatusBadRequest, "name is required")
+		return
+	}
+	if goal.Type != "any" && !models.ValidSportTypes[goal.Type] {
+		writeError(w, http.StatusBadRequest, "Invalid goal type: "+goal.Type)
+		return
+	}
+	if !models.ValidGoalMetrics[goal.Metric] {
+		writeError(w, http.StatusBadRequest, "Invalid metric: "+goal.Metric)
+		return
+	}
+	if goal.Target <= 0 {
+		writeError(w, http.StatusBadRequest, "target must be positive")
+		return
+	}
+	if !monthPattern.MatchString(goal.Month) {
+		writeError(w, http.StatusBadRequest, "month must be YYYY-MM")
+		return
+	}
+	goal.Active = true
+
+	res, err := a.db.Goals().InsertOne(r.Context(), goal)
+	if err != nil {
+		slog.Error("failed to insert goal", "error", err)
+		writeError(w, http.StatusServiceUnavailable, "Internal Server Error: Database operation failed")
+		return
+	}
+	goal.ID = res.InsertedID.(primitive.ObjectID)
+	writeJSON(w, http.StatusCreated, goal)
+}
+
+func (a *API) deleteGoal(w http.ResponseWriter, r *http.Request) {
+	id, err := primitive.ObjectIDFromHex(r.PathValue("id"))
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "Invalid goal id")
+		return
+	}
+	res, err := a.db.Goals().DeleteOne(r.Context(), bson.M{"_id": id})
+	if err != nil {
+		slog.Error("database error", "error", err)
+		writeError(w, http.StatusServiceUnavailable, "Internal Server Error: Database operation failed")
+		return
+	}
+	if res.DeletedCount == 0 {
+		writeError(w, http.StatusNotFound, "Goal not found")
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]bool{"deleted": true})
+}
+
+func (a *API) goalProgress(w http.ResponseWriter, r *http.Request) {
+	month := r.URL.Query().Get("month")
+	if month == "" {
+		month = time.Now().Format("2006-01")
+	}
+	if !monthPattern.MatchString(month) {
+		writeError(w, http.StatusBadRequest, "month must be YYYY-MM")
+		return
+	}
+
+	cur, err := a.db.Goals().Find(r.Context(), bson.M{"month": month, "active": true})
+	if err != nil {
+		slog.Error("database error", "error", err)
+		writeError(w, http.StatusServiceUnavailable, "Internal Server Error: Database operation failed")
+		return
+	}
+	var goals []models.Goal
+	if err := cur.All(r.Context(), &goals); err != nil {
+		slog.Error("failed to decode goals", "error", err)
+		writeError(w, http.StatusServiceUnavailable, "Internal Server Error: Database operation failed")
+		return
+	}
+
+	acts, err := a.allActivities(r.Context())
+	if err != nil {
+		slog.Error("database error", "error", err)
+		writeError(w, http.StatusServiceUnavailable, "Internal Server Error: Database operation failed")
+		return
+	}
+
+	now := time.Now()
+	out := make([]stats.GoalProgress, 0, len(goals))
+	for _, g := range goals {
+		out = append(out, stats.GoalProgressFor(acts, g, now))
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"month": month, "goals": out})
 }
 
 // LambdaHandler adapts API Gateway HTTP API (payload v2) events to the HTTP handler.

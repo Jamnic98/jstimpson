@@ -1,5 +1,5 @@
 import projects from '@/data/projects'
-import { type Project } from '@/types'
+import { type ActivitySummary, type GoalProgress, type Project } from '@/types'
 
 export const reduceSumFunc = (prev: number, cur: number) => prev + cur
 
@@ -49,6 +49,27 @@ export const fetchActivities = async (type?: string, timestamp?: number) => {
     }
   }
 }
+
+export const serverApiFetch = async (path: string) => {
+  const url = new URL(path, process.env.NEXT_PUBLIC_SERVER_URL as string)
+  const response = await fetch(url.toString(), {
+    next: { revalidate: 3600, tags: ['stats'] },
+    // server-side only: the backend requires this key (never shipped to the browser)
+    headers: { 'x-api-key': process.env.SERVER_API_KEY ?? '' },
+  })
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${path}: ${response.status}`)
+  }
+  return response.json()
+}
+
+export const fetchActivitySummary = (type: string): Promise<ActivitySummary> =>
+  serverApiFetch(`/stats/activities?type=${encodeURIComponent(type)}`)
+
+export const fetchGoalProgress = (
+  month: string
+): Promise<{ month: string; goals: GoalProgress[] }> =>
+  serverApiFetch(`/stats/goals?month=${month}`)
 
 export const leastSquares = (xSeries: number[], ySeries: number[]) => {
   const xBar = (xSeries.reduce(reduceSumFunc, 0) * 1.0) / xSeries.length
